@@ -10,7 +10,9 @@
       "unit": "items/h",
       "source": {
         "name": "Synthetic contract fixture",
-        "reference": "UI and schema test only"
+        "reference": "UI and schema test only",
+        "timestamp": "2026-01-01T00:00:00Z",
+        "limitation": "Synthetic data only."
       }
     },
     {
