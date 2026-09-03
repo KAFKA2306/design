@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 test('public tree policy passes', () => {
-  assert.doesNotThrow(() => execFileSync(process.execPath, [path.join(root, 'scripts', 'public-tree-scan.mjs')], { cwd: root, stdio: 'pipe' }));
+  assert.doesNotThrow(() => execFileSync(process.execPath, [path.join(root, 'scripts', 'public-tree-check.mjs')], { cwd: root, stdio: 'pipe' }));
 });
 
 test('public release gate remains history-aware', () => {
