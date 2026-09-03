@@ -3,7 +3,14 @@ import fs from 'node:fs'
 import test from 'node:test'
 
 const registry = JSON.parse(fs.readFileSync('registry.json', 'utf8'))
-const source = fs.readFileSync('registry/ui/product-ui.tsx', 'utf8')
+const entry = fs.readFileSync('registry/ui/product-ui.tsx', 'utf8')
+const implementationPaths = [
+  'registry/ui/product/semantic.ts',
+  'registry/ui/product/information.tsx',
+  'registry/ui/product/chart.tsx',
+  'registry/ui/product/artifact.tsx',
+]
+const source = implementationPaths.map((path) => fs.readFileSync(path, 'utf8')).join('\n')
 const styles = fs.readFileSync('styles/components.css', 'utf8')
 const fixture = fs.readFileSync('fixtures/registry-consumer/src/main.tsx', 'utf8')
 const fixtureStyles = fs.readFileSync('fixtures/registry-consumer/src/index.css', 'utf8')
@@ -11,13 +18,22 @@ const consumerPackage = JSON.parse(fs.readFileSync('fixtures/registry-consumer/p
 const consumerTsconfig = JSON.parse(fs.readFileSync('fixtures/registry-consumer/tsconfig.json', 'utf8'))
 const product = registry.items.find((item) => item.name === 'kafka-product-ui')
 
-test('Product UI is one registry item with pinned chart dependencies', () => {
+test('Product UI stays one registry item while implementation is responsibility-split', () => {
   assert.ok(product)
   assert.equal(product.type, 'registry:ui')
   assert.deepEqual(product.dependencies, ['recharts@3.10.1', 'react-is@19.2.8'])
   assert.deepEqual(product.files, [
     { path: 'registry/ui/product-ui.tsx', type: 'registry:ui', target: '~/src/components/ui/product-ui.tsx' },
+    { path: 'registry/ui/product/semantic.ts', type: 'registry:ui', target: '~/src/components/ui/product/semantic.ts' },
+    { path: 'registry/ui/product/information.tsx', type: 'registry:ui', target: '~/src/components/ui/product/information.tsx' },
+    { path: 'registry/ui/product/chart.tsx', type: 'registry:ui', target: '~/src/components/ui/product/chart.tsx' },
+    { path: 'registry/ui/product/artifact.tsx', type: 'registry:ui', target: '~/src/components/ui/product/artifact.tsx' },
   ])
+  assert.equal(registry.items.filter((item) => item.name === 'kafka-product-ui').length, 1)
+  assert.equal((entry.match(/export function\s+/g) ?? []).length, 0)
+  assert.match(entry, /from '\.\/product\/information'/)
+  assert.match(entry, /from '\.\/product\/chart'/)
+  assert.match(entry, /from '\.\/product\/artifact'/)
 })
 
 test('all Product UI public patterns have one canonical implementation', () => {
