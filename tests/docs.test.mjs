@@ -4,6 +4,7 @@ import test from 'node:test'
 
 const readme = fs.readFileSync('README.md', 'utf8')
 const agents = fs.readFileSync('AGENTS.md', 'utf8')
+const fixture = fs.readFileSync('fixtures/registry-consumer/src/main.tsx', 'utf8')
 const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
 
 const canonicalReferences = [
@@ -56,4 +57,34 @@ test('durable prose does not copy dependency version literals', () => {
   for (const version of versions) {
     assert.equal(prose.includes(version), false, `dependency version ${version} belongs in package.json, not prose`)
   }
+})
+
+test('AGENTS makes user decision order a durable design invariant', () => {
+  assert.match(agents, /context\/identity -> current decision or status -> next action -> key measures or primary view -> supporting evidence\/drilldown -> source\/reference\/implementation details/)
+  assert.match(agents, /Changelog, Recent Updates, implementation notes, debug information, roadmap/)
+  assert.match(agents, /PLANNED or unavailable features must not visually compete with usable actions/)
+  assert.match(agents, /same information hierarchy and brand grammar across domains, not the same dashboard shape/)
+})
+
+test('canonical reference surface follows the primary reading path before reference detail', () => {
+  const orderedMarkers = [
+    'className="k-dashboard-header"',
+    'className="k-dashboard-decision"',
+    'className="k-dashboard-metrics"',
+    'id="overview"',
+    'id="frontier"',
+    'id="positions"',
+    'id="sources"',
+    '<ComponentQa />',
+  ]
+
+  let previous = -1
+  for (const marker of orderedMarkers) {
+    const current = fixture.indexOf(marker)
+    assert.ok(current > previous, `${marker} must stay after the previous journey stage`)
+    previous = current
+  }
+
+  assert.match(fixture, /<details className="consumer-qa">/)
+  assert.equal(fixture.includes('PLANNED'), false)
 })
