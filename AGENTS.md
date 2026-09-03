@@ -11,13 +11,18 @@
 - Registry component source lives once under `registry/ui/`; consumer copies are generated or installed artifacts.
 - `registry/ui/product-ui.tsx` is the stable Product UI public entrypoint. Keep implementation responsibility-split under `registry/ui/product/`.
 - Product charts are centrally configured in `registry/ui/product/chart.tsx`. Consumers must not redefine palette, grid, geometry, actual/forecast styling, tooltip, or chart spacing.
+- User-journey action vocabulary, candidate patterns, and recommendation logic live in `registry/ui/product/journey.ts`. Do not create domain-specific competing journey authorities.
 
 ## User journey
 
-- Build primary product surfaces in decision order: context/identity -> current decision or status -> next action -> key measures or primary view -> supporting evidence/drilldown -> source/reference/implementation details.
-- Changelog, Recent Updates, implementation notes, debug information, roadmap, and long explanatory text do not belong in the primary reading path. Move them below the primary task or into explicit disclosure such as `details` when they remain useful.
+- Compose primary product surfaces from canonical user actions: inspect, compare, decide, act, and investigate.
+- Do not force one global reading order across every product. Use the canonical journey patterns as candidates and choose the pattern that fits the page purpose.
+- Recommend candidates from explicit structural evidence and aggregate usage signals. Existing UI structure, data, available actions, transitions, declared priorities, consumer-provided priorities, and observed aggregate usage may contribute.
+- Raw usage events remain consumer-owned. This repository defines the aggregate input semantics but does not collect or store consumer telemetry.
+- Prefer meaningful completed components whose visual hierarchy, information order, interaction, responsive behavior, accessibility, and state representation are owned here. Consumers should provide data and business actions rather than reconstruct the same purpose component.
+- Changelog, Recent Updates, implementation notes, debug information, roadmap, and long explanatory text do not belong in the primary task path. Move them below the primary task or into explicit disclosure when they remain useful.
 - PLANNED or unavailable features must not visually compete with usable actions. Do not fill the first screen with unavailable navigation or specimen content.
-- Apply the same information hierarchy and brand grammar across domains, not the same dashboard shape. A financial BI, developer tool, and 3D workflow may use different views while preserving the same reading logic.
+- Apply the same brand grammar and interaction quality across products without forcing the same dashboard shape.
 - Prefer changing order, visual hierarchy, and interaction over adding prose that explains a confusing interface.
 
 ## Change discipline
