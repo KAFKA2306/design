@@ -10,8 +10,8 @@ import {
   ChartFrame,
   DataTable,
   DecisionPanel,
+  EvidenceSurface,
   FilterToolbar,
-  SourceLine,
   type BarPoint,
   type DataTableColumn,
   type ScatterPoint,
@@ -217,10 +217,23 @@ function App() {
           <DataTable id="portfolio-data" columns={columns} rows={filteredRows} />
         </section>
 
-        <section id="sources" className="k-dashboard-section" aria-labelledby="sources-heading">
-          <header className="k-dashboard-section-header"><h2 id="sources-heading">Source boundary</h2></header>
-          <SourceLine source={source} />
-        </section>
+        <EvidenceSurface
+          id="sources"
+          eyebrow="TRACEABILITY"
+          title="Source boundary"
+          records={[
+            {
+              id: 'reference-snapshot',
+              label: 'Synthetic reference snapshot',
+              status: 'fixture-only',
+              source,
+              revision: 'fixture-v0',
+              hash: 'synthetic-reference-hash',
+              href: '#portfolio-data',
+              hrefLabel: 'View underlying data',
+            },
+          ]}
+        />
 
         <ComponentQa />
       </main>
