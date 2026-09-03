@@ -1,0 +1,61 @@
+name: registry
+
+on:
+  pull_request:
+    paths:
+      - 'registry.json'
+      - 'styles/**'
+      - 'scripts/registry-check.mjs'
+      - 'fixtures/registry-consumer/**'
+      - '.github/workflows/registry.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'registry.json'
+      - 'styles/**'
+      - 'scripts/registry-check.mjs'
+      - 'fixtures/registry-consumer/**'
+      - '.github/workflows/registry.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  registry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22.19.0'
+      - name: Enable pnpm
+        run: corepack enable && corepack prepare pnpm@11.25.0 --activate
+      - name: Install design repo
+        run: pnpm install --frozen-lockfile
+      - name: Check registry source contract
+        run: pnpm registry:check
+      - name: Validate GitHub registry at exact commit
+        run: pnpm dlx shadcn@4.20.1 registry validate KAFKA2306/design#${GITHUB_SHA}
+      - name: List registry at exact commit
+        run: pnpm dlx shadcn@4.20.1 list KAFKA2306/design#${GITHUB_SHA}
+      - name: View kafka-base at exact commit
+        run: pnpm dlx shadcn@4.20.1 view KAFKA2306/design/kafka-base#${GITHUB_SHA}
+      - name: Prepare clean consumer
+        run: |
+          cp -R fixtures/registry-consumer "$RUNNER_TEMP/consumer"
+          cd "$RUNNER_TEMP/consumer"
+          pnpm install --no-frozen-lockfile
+      - name: Dry-run kafka-base install
+        working-directory: ${{ runner.temp }}/consumer
+        run: pnpm dlx shadcn@4.20.1 add KAFKA2306/design/kafka-base#${GITHUB_SHA} --yes --dry-run
+      - name: Install kafka-base
+        working-directory: ${{ runner.temp }}/consumer
+        run: pnpm dlx shadcn@4.20.1 add KAFKA2306/design/kafka-base#${GITHUB_SHA} --yes
+      - name: Verify consumer output
+        working-directory: ${{ runner.temp }}/consumer
+        run: |
+          test -f src/styles/tokens.css
+          test -f src/styles/globals.css
+          grep -q '"@base-ui/react"' package.json
+          grep -q '"lucide-react"' package.json
+          pnpm build
