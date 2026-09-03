@@ -25,6 +25,16 @@
 - Apply the same brand grammar and interaction quality across products without forcing the same dashboard shape.
 - Prefer changing order, visual hierarchy, and interaction over adding prose that explains a confusing interface.
 
+## Evaluation loop
+
+- Generation is replaceable; evaluation is durable. Repository value must accumulate in constraints, contracts, tests, reference data, and feedback loops rather than one-off generated screens.
+- Every reusable product surface must make its important states testable: usable, loading, empty, error, unavailable, and unverified where applicable.
+- Prefer machine-checkable acceptance criteria over prose. If a rule can be expressed as a schema, type, test, conformance check, or generated artifact check, encode it there instead of creating another document.
+- A successful build is not evidence of a successful user journey. Evaluate whether the user can inspect, compare, decide, act, and investigate without relying on explanatory prose.
+- Consumer adoption is part of validation. A design change is not complete merely because the specimen looks correct; downstream integration must preserve the canonical contract and journey semantics.
+- Synthetic fixtures are test-only evidence. They must never be presented as production truth or used to conceal missing consumer data.
+- Missing canonical input, provenance, or required state must fail visibly. Do not convert unknown or unverified data into plausible-looking values.
+
 ## Change discipline
 
 - Prefer DELETE > MERGE > REPLACE > ADD. Remove or consolidate stale authority before adding a new layer.
