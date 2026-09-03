@@ -1,5 +1,23 @@
 # design
 
-Canonical design implementation for reusable UI and cross-format artifacts.
+Canonical design-system source for KAFKA2306 repositories.
 
-Current work is tracked in GitHub Issues. Design rules belong in canonical token/schema/validator source files rather than being duplicated here.
+## Development
+
+```bash
+corepack enable
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+Canonical visual values live in `tokens/foundation.tokens.json`. `styles/tokens.css` is generated and must not be edited directly.
+
+Validation:
+
+```bash
+pnpm tokens:validate
+pnpm tokens:check
+pnpm lint
+pnpm test
+pnpm build
+```
