@@ -9,8 +9,8 @@ import {
   ArtifactViewer,
   ChartFrame,
   DataTable,
+  DecisionPanel,
   FilterToolbar,
-  Metric,
   SourceLine,
   type BarPoint,
   type DataTableColumn,
@@ -152,6 +152,7 @@ function ComponentQa() {
 function App() {
   const [query, setQuery] = useState('')
   const [navOpen, setNavOpen] = useState(false)
+  const [decisionReviewed, setDecisionReviewed] = useState(false)
   const filteredRows = useMemo(() => rows.filter((row) => row.asset.toLowerCase().includes(query.toLowerCase())), [query])
 
   return (
@@ -173,39 +174,38 @@ function App() {
       </aside>
 
       <main className="k-dashboard-main">
-        <header className="k-dashboard-header">
-          <div className="k-dashboard-heading">
-            <p className="k-dashboard-eyebrow">PORTFOLIO INTELLIGENCE / SYNTHETIC REFERENCE</p>
-            <h1 className="k-dashboard-title">Growth portfolio</h1>
-            <SourceLine source={source} />
-          </div>
-          <div className="k-dashboard-decision" aria-label="Current decision">
-            <span>Decision</span>
-            <strong>No rebalance required</strong>
-            <small>Forecast risk 18.7% is within the 20.0% budget.</small>
-          </div>
-        </header>
-
-        <section className="k-dashboard-metrics" aria-label="Portfolio metrics">
-          {metrics.map((fact) => <Metric key={fact.id} fact={fact} />)}
-        </section>
+        <DecisionPanel
+          id="decision"
+          eyebrow="PORTFOLIO INTELLIGENCE / SYNTHETIC REFERENCE"
+          title="Growth portfolio"
+          source={source}
+          decision={decisionReviewed ? 'Decision reviewed' : 'No rebalance required'}
+          rationale="Forecast risk 18.7% is within the 20.0% budget."
+          state="ready"
+          metrics={metrics}
+          primaryAction={{
+            label: decisionReviewed ? 'Reviewed' : 'Review decision',
+            onClick: () => setDecisionReviewed(true),
+            disabled: decisionReviewed,
+          }}
+          secondaryAction={{
+            label: 'View positions',
+            onClick: () => document.getElementById('positions')?.scrollIntoView({ block: 'start' }),
+          }}
+          evidence={[
+            { label: 'Target', detail: 'Reduce risk by 2.2pt without materially reducing expected return.' },
+            { label: 'Constraint', detail: 'Cash floor 5%; current 6.8%.' },
+            { label: 'Watch', detail: 'US Tech contributes 38.4% of modeled portfolio risk.' },
+          ]}
+        />
 
         <section id="overview" className="k-dashboard-grid" aria-label="Performance and risk">
           <ChartFrame title="Portfolio performance" unit="index" data={performance} source={source} dataTableId="portfolio-data" />
           <ChartFrame variant="bar" title="Risk contribution" unit="%" data={riskContribution} source={source} dataTableId="portfolio-data" />
         </section>
 
-        <section id="frontier" className="k-dashboard-grid" aria-label="Efficient frontier and decision context">
+        <section id="frontier" className="k-dashboard-section" aria-label="Efficient frontier">
           <ChartFrame variant="scatter" title="Efficient frontier" data={frontier} xLabel="Risk %" yLabel="Return %" source={source} dataTableId="portfolio-data" />
-          <div className="k-dashboard-brief">
-            <h2>Decision context</h2>
-            <p>Current portfolio remains above the minimum return constraint and below the risk budget.</p>
-            <ul>
-              <li><strong>Target:</strong> reduce risk by 2.2pt without materially reducing expected return.</li>
-              <li><strong>Constraint:</strong> cash floor 5%; current 6.8%.</li>
-              <li><strong>Watch:</strong> US Tech contributes 38.4% of modeled portfolio risk.</li>
-            </ul>
-          </div>
         </section>
 
         <section id="positions" className="k-dashboard-section" aria-labelledby="positions-heading">

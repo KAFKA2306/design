@@ -7,6 +7,14 @@ export type { BarPoint, ChartFrameProps, ScatterPoint, TimeSeriesPoint } from '.
 export { ArtifactGallery, ArtifactMetadata, ArtifactViewer } from './product/artifact'
 export type { ArtifactItem, ArtifactStatus } from './product/artifact'
 
+export { DecisionPanel } from './product/decision'
+export type {
+  DecisionPanelAction,
+  DecisionPanelEvidence,
+  DecisionPanelProps,
+  DecisionPanelState,
+} from './product/decision'
+
 export {
   DEFAULT_JOURNEY_RECOMMENDATION_LIMIT,
   JOURNEY_ACTIONS,
