@@ -29,7 +29,9 @@
             "properties": {
               "name": { "type": "string", "minLength": 1 },
               "url": { "type": "string", "minLength": 1 },
-              "reference": { "type": "string", "minLength": 1 }
+              "reference": { "type": "string", "minLength": 1 },
+              "timestamp": { "type": "string", "minLength": 1 },
+              "limitation": { "type": "string", "minLength": 1 }
             }
           }
         },
