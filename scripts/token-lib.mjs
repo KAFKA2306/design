@@ -106,15 +106,25 @@ export function generateCss(root) {
     else if (name.startsWith('color.dark.')) dark.push(line);
     else shared.push(`  ${cssName(name)}: ${cssValue(resolved)};`);
   }
+  const autoDark = dark.map((line) => `  ${line}`);
   return [
     '/* Generated from tokens/foundation.tokens.json. Do not edit. */',
     ':root {',
+    '  color-scheme: light;',
     ...shared,
     ...light,
     '}',
     '',
     '[data-theme="dark"] {',
+    '  color-scheme: dark;',
     ...dark,
+    '}',
+    '',
+    '@media (prefers-color-scheme: dark) {',
+    '  :root:not([data-theme]) {',
+    '    color-scheme: dark;',
+    ...autoDark,
+    '  }',
     '}',
     ''
   ].join('\n');
