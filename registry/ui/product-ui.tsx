@@ -30,6 +30,13 @@ export type {
   EvidenceSurfaceRecord,
 } from './product/evidence'
 
+export { StatusSurface } from './product/status'
+export type {
+  StatusSurfaceItem,
+  StatusSurfaceProps,
+  StatusSurfaceTone,
+} from './product/status'
+
 export {
   DEFAULT_JOURNEY_RECOMMENDATION_LIMIT,
   JOURNEY_ACTIONS,
