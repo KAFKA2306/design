@@ -51,11 +51,15 @@ jobs:
       - name: Install kafka-base
         working-directory: ${{ runner.temp }}/consumer
         run: pnpm dlx shadcn@4.20.1 add KAFKA2306/design/kafka-base#${GITHUB_SHA} --yes
-      - name: Verify consumer output
+      - name: Verify installed files
         working-directory: ${{ runner.temp }}/consumer
         run: |
           test -f src/styles/tokens.css
           test -f src/styles/globals.css
-          grep -q '"@base-ui/react"' package.json
-          grep -q '"lucide-react"' package.json
-          pnpm build
+      - name: Verify pinned dependencies
+        working-directory: ${{ runner.temp }}/consumer
+        run: |
+          node -e "const p=require('./package.json'); if(p.dependencies?.['@base-ui/react']!=='1.7.0') throw new Error('expected @base-ui/react 1.7.0, got '+p.dependencies?.['@base-ui/react']); if(p.dependencies?.['lucide-react']!=='1.39.0') throw new Error('expected lucide-react 1.39.0, got '+p.dependencies?.['lucide-react'])"
+      - name: Build installed consumer
+        working-directory: ${{ runner.temp }}/consumer
+        run: pnpm build
