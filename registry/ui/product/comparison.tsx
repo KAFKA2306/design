@@ -66,19 +66,19 @@ export function ComparisonSurface({
         </div>
       </header>
 
-      <div className="k-dashboard-metrics" data-comparison-stage="options" aria-label="Comparison options">
+      <dl className="k-artifact-metadata" data-comparison-stage="options" aria-label="Comparison options">
         {options.map((option) => (
-          <article key={option.id} className="k-metric" data-role={option.role} data-status={option.status ?? undefined}>
-            <div className="k-metric-meta">
-              <span className="k-metric-kind">{option.role}</span>
+          <div key={option.id} data-role={option.role} data-status={option.status ?? undefined}>
+            <dt>{option.role}</dt>
+            <dd>
               <strong>{option.label}</strong>
-              {option.status ? <span>{option.status}</span> : null}
-            </div>
-            {option.summary ? <span>{option.summary}</span> : null}
-            {option.source ? <SourceLine source={option.source} /> : null}
-          </article>
+              {option.status ? <> · {option.status}</> : null}
+              {option.summary ? <> — {option.summary}</> : null}
+              {option.source ? <SourceLine source={option.source} /> : null}
+            </dd>
+          </div>
         ))}
-      </div>
+      </dl>
 
       <div className="k-table-region" data-comparison-stage="metrics">
         <table className="k-data-table">
