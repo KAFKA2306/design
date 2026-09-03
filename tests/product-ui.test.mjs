@@ -108,10 +108,11 @@ test('artifact viewer and gallery expose explicit fit, failure states and keyboa
   assert.match(source, /Generated/)
 })
 
-test('clean consumer build type-checks before rendering with TypeScript 7-compatible alias resolution', () => {
+test('clean consumer build type-checks before rendering with TypeScript 7 and Vite import types', () => {
   assert.equal(consumerPackage.scripts.build, 'tsc --noEmit && vite build')
   assert.equal(Object.hasOwn(consumerTsconfig.compilerOptions, 'baseUrl'), false)
   assert.deepEqual(consumerTsconfig.compilerOptions.paths, { '@/*': ['./src/*'] })
+  assert.deepEqual(consumerTsconfig.compilerOptions.types, ['vite/client'])
 })
 
 test('Product UI source carries no raw visual color or forbidden decorative effect', () => {
