@@ -6,3 +6,22 @@ export type { BarPoint, ChartFrameProps, ScatterPoint, TimeSeriesPoint } from '.
 
 export { ArtifactGallery, ArtifactMetadata, ArtifactViewer } from './product/artifact'
 export type { ArtifactItem, ArtifactStatus } from './product/artifact'
+
+export {
+  DEFAULT_JOURNEY_RECOMMENDATION_LIMIT,
+  JOURNEY_ACTIONS,
+  JOURNEY_PATTERNS,
+  getJourneyPattern,
+  recommendJourneyPatterns,
+} from './product/journey'
+export type {
+  JourneyAction,
+  JourneyPattern,
+  JourneyPatternId,
+  JourneyRecommendation,
+  JourneyRecommendationInput,
+  JourneyStructuralEvidence,
+  JourneyStructuralSource,
+  JourneyUsageAggregate,
+  JourneyUsageSource,
+} from './product/journey'
