@@ -11,9 +11,17 @@ const expected = ['kafka-button', 'kafka-input', 'kafka-dialog', 'kafka-tabs']
 test('Core UI v0 exposes exactly four registry UI components', () => {
   assert.deepEqual(uiItems.map((item) => item.name), expected)
   for (const item of uiItems) {
-    assert.ok(item.dependencies.includes('@base-ui/react@1.7.0'))
-    assert.ok(item.registryDependencies.includes('kafka-base'))
+    assert.deepEqual(item.dependencies, ['@base-ui/react@1.7.0'])
+    assert.equal('registryDependencies' in item, false)
   }
+})
+
+test('Dialog ships its shared Button source without creating a second implementation', () => {
+  const dialog = uiItems.find((item) => item.name === 'kafka-dialog')
+  assert.deepEqual(
+    dialog.files.map((file) => file.path),
+    ['registry/ui/dialog.tsx', 'registry/ui/button.tsx'],
+  )
 })
 
 test('Button delegates interaction to Base UI and exposes disabled/loading states', () => {
