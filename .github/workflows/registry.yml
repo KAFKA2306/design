@@ -31,26 +31,51 @@ jobs:
         run: pnpm test
       - name: Validate GitHub source registry
         run: pnpm dlx shadcn@${SHADCN_VERSION} registry validate KAFKA2306/design#${EXACT_SHA}
-      - name: List and view pinned registry item
+      - name: List and view pinned registry items
         run: |
           pnpm dlx shadcn@${SHADCN_VERSION} list KAFKA2306/design#${EXACT_SHA}
           pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-base#${EXACT_SHA}
+          pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-button#${EXACT_SHA}
+          pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-input#${EXACT_SHA}
+          pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-dialog#${EXACT_SHA}
+          pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-tabs#${EXACT_SHA}
       - name: Install initialized clean consumer dependencies
         run: |
           test -f fixtures/registry-consumer/components.json
           pnpm --dir fixtures/registry-consumer install --lockfile=false
-      - name: Dry-run kafka-base install
-        run: pnpm dlx shadcn@${SHADCN_VERSION} add KAFKA2306/design/kafka-base#${EXACT_SHA} --dry-run --cwd fixtures/registry-consumer
       - name: Install kafka-base
         run: pnpm dlx shadcn@${SHADCN_VERSION} add KAFKA2306/design/kafka-base#${EXACT_SHA} --yes --cwd fixtures/registry-consumer
+      - name: Dry-run Core UI install
+        run: |
+          pnpm dlx shadcn@${SHADCN_VERSION} add \
+            KAFKA2306/design/kafka-button#${EXACT_SHA} \
+            KAFKA2306/design/kafka-input#${EXACT_SHA} \
+            KAFKA2306/design/kafka-dialog#${EXACT_SHA} \
+            KAFKA2306/design/kafka-tabs#${EXACT_SHA} \
+            --dry-run --cwd fixtures/registry-consumer
+      - name: Install Core UI
+        run: |
+          pnpm dlx shadcn@${SHADCN_VERSION} add \
+            KAFKA2306/design/kafka-button#${EXACT_SHA} \
+            KAFKA2306/design/kafka-input#${EXACT_SHA} \
+            KAFKA2306/design/kafka-dialog#${EXACT_SHA} \
+            KAFKA2306/design/kafka-tabs#${EXACT_SHA} \
+            --yes --cwd fixtures/registry-consumer
       - name: Verify installed authority
         run: |
           test -f fixtures/registry-consumer/src/styles/kafka-tokens.css
           test -f fixtures/registry-consumer/src/styles/kafka-globals.css
+          test -f fixtures/registry-consumer/src/styles/kafka-components.css
+          test -f fixtures/registry-consumer/src/components/ui/button.tsx
+          test -f fixtures/registry-consumer/src/components/ui/input.tsx
+          test -f fixtures/registry-consumer/src/components/ui/dialog.tsx
+          test -f fixtures/registry-consumer/src/components/ui/tabs.tsx
           grep -F '@import "./styles/kafka-tokens.css"' fixtures/registry-consumer/src/index.css
           grep -F '@import "./styles/kafka-globals.css"' fixtures/registry-consumer/src/index.css
+          grep -F '@import "./styles/kafka-components.css"' fixtures/registry-consumer/src/index.css
           grep -F '"style": "base-nova"' fixtures/registry-consumer/components.json
           grep -F '"iconLibrary": "lucide"' fixtures/registry-consumer/components.json
+          node -e "const p=require('./fixtures/registry-consumer/package.json'); if(p.dependencies?.['@base-ui/react']!=='1.7.0') throw new Error('expected @base-ui/react 1.7.0, got '+p.dependencies?.['@base-ui/react'])"
           test ! -e fixtures/registry-consumer/tokens/foundation.tokens.json
       - name: Build installed consumer
         run: pnpm --dir fixtures/registry-consumer build

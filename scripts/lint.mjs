@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const roots = ['styles', 'src'];
+const roots = ['styles', 'src', 'registry'];
 const files = [];
 for (const root of roots) {
   for (const entry of fs.readdirSync(root, { recursive: true, withFileTypes: true })) {
