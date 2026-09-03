@@ -31,10 +31,70 @@
       ],
       "cssVars": {
         "light": {
-          "background": "var(--k-color-canvas)", "foreground": "var(--k-color-foreground)", "card": "var(--k-color-surface)", "card-foreground": "var(--k-color-foreground)", "popover": "var(--k-color-surface)", "popover-foreground": "var(--k-color-foreground)", "primary": "var(--k-color-primary)", "primary-foreground": "var(--k-color-canvas)", "secondary": "var(--k-color-surface)", "secondary-foreground": "var(--k-color-foreground)", "muted": "var(--k-color-surface)", "muted-foreground": "var(--k-color-muted-foreground)", "accent": "var(--k-color-accent)", "accent-foreground": "var(--k-color-foreground)", "destructive": "var(--k-color-danger)", "border": "var(--k-color-border)", "input": "var(--k-color-border)", "ring": "var(--k-color-focus)", "chart-1": "var(--k-color-primary)", "chart-2": "var(--k-color-accent)", "chart-3": "var(--k-color-success)", "chart-4": "var(--k-color-warning)", "chart-5": "var(--k-color-danger)", "sidebar": "var(--k-color-surface)", "sidebar-foreground": "var(--k-color-foreground)", "sidebar-primary": "var(--k-color-primary)", "sidebar-primary-foreground": "var(--k-color-canvas)", "sidebar-accent": "var(--k-color-accent)", "sidebar-accent-foreground": "var(--k-color-foreground)", "sidebar-border": "var(--k-color-border)", "sidebar-ring": "var(--k-color-focus)"
+          "background": "var(--k-color-canvas)",
+          "foreground": "var(--k-color-foreground)",
+          "card": "var(--k-color-surface)",
+          "card-foreground": "var(--k-color-foreground)",
+          "popover": "var(--k-color-surface)",
+          "popover-foreground": "var(--k-color-foreground)",
+          "primary": "var(--k-color-primary)",
+          "primary-foreground": "var(--k-color-canvas)",
+          "secondary": "var(--k-color-surface)",
+          "secondary-foreground": "var(--k-color-foreground)",
+          "muted": "var(--k-color-surface)",
+          "muted-foreground": "var(--k-color-muted-foreground)",
+          "accent": "var(--k-color-accent)",
+          "accent-foreground": "var(--k-color-foreground)",
+          "destructive": "var(--k-color-danger)",
+          "border": "var(--k-color-border)",
+          "input": "var(--k-color-border)",
+          "ring": "var(--k-color-focus)",
+          "chart-1": "var(--k-color-primary)",
+          "chart-2": "var(--k-color-accent)",
+          "chart-3": "var(--k-color-success)",
+          "chart-4": "var(--k-color-warning)",
+          "chart-5": "var(--k-color-danger)",
+          "sidebar": "var(--k-color-surface)",
+          "sidebar-foreground": "var(--k-color-foreground)",
+          "sidebar-primary": "var(--k-color-primary)",
+          "sidebar-primary-foreground": "var(--k-color-canvas)",
+          "sidebar-accent": "var(--k-color-accent)",
+          "sidebar-accent-foreground": "var(--k-color-foreground)",
+          "sidebar-border": "var(--k-color-border)",
+          "sidebar-ring": "var(--k-color-focus)"
         },
         "dark": {
-          "background": "var(--k-color-canvas)", "foreground": "var(--k-color-foreground)", "card": "var(--k-color-surface)", "card-foreground": "var(--k-color-foreground)", "popover": "var(--k-color-surface)", "popover-foreground": "var(--k-color-foreground)", "primary": "var(--k-color-primary)", "primary-foreground": "var(--k-color-canvas)", "secondary": "var(--k-color-surface)", "secondary-foreground": "var(--k-color-foreground)", "muted": "var(--k-color-surface)", "muted-foreground": "var(--k-color-muted-foreground)", "accent": "var(--k-color-accent)", "accent-foreground": "var(--k-color-foreground)", "destructive": "var(--k-color-danger)", "border": "var(--k-color-border)", "input": "var(--k-color-border)", "ring": "var(--k-color-focus)", "chart-1": "var(--k-color-primary)", "chart-2": "var(--k-color-accent)", "chart-3": "var(--k-color-success)", "chart-4": "var(--k-color-warning)", "chart-5": "var(--k-color-danger)", "sidebar": "var(--k-color-surface)", "sidebar-foreground": "var(--k-color-foreground)", "sidebar-primary": "var(--k-color-primary)", "sidebar-primary-foreground": "var(--k-color-canvas)", "sidebar-accent": "var(--k-color-accent)", "sidebar-accent-foreground": "var(--k-color-foreground)", "sidebar-border": "var(--k-color-border)", "sidebar-ring": "var(--k-color-focus)"
+          "background": "var(--k-color-canvas)",
+          "foreground": "var(--k-color-foreground)",
+          "card": "var(--k-color-surface)",
+          "card-foreground": "var(--k-color-foreground)",
+          "popover": "var(--k-color-surface)",
+          "popover-foreground": "var(--k-color-foreground)",
+          "primary": "var(--k-color-primary)",
+          "primary-foreground": "var(--k-color-canvas)",
+          "secondary": "var(--k-color-surface)",
+          "secondary-foreground": "var(--k-color-foreground)",
+          "muted": "var(--k-color-surface)",
+          "muted-foreground": "var(--k-color-muted-foreground)",
+          "accent": "var(--k-color-accent)",
+          "accent-foreground": "var(--k-color-foreground)",
+          "destructive": "var(--k-color-danger)",
+          "border": "var(--k-color-border)",
+          "input": "var(--k-color-border)",
+          "ring": "var(--k-color-focus)",
+          "chart-1": "var(--k-color-primary)",
+          "chart-2": "var(--k-color-accent)",
+          "chart-3": "var(--k-color-success)",
+          "chart-4": "var(--k-color-warning)",
+          "chart-5": "var(--k-color-danger)",
+          "sidebar": "var(--k-color-surface)",
+          "sidebar-foreground": "var(--k-color-foreground)",
+          "sidebar-primary": "var(--k-color-primary)",
+          "sidebar-primary-foreground": "var(--k-color-canvas)",
+          "sidebar-accent": "var(--k-color-accent)",
+          "sidebar-accent-foreground": "var(--k-color-foreground)",
+          "sidebar-border": "var(--k-color-border)",
+          "sidebar-ring": "var(--k-color-focus)"
         }
       },
       "css": {
@@ -91,7 +151,11 @@
       "description": "Canonical high-density information, chart, table, and artifact patterns.",
       "dependencies": ["recharts@3.10.1", "react-is@19.2.8"],
       "files": [
-        { "path": "registry/ui/product-ui.tsx", "type": "registry:ui", "target": "~/src/components/ui/product-ui.tsx" }
+        { "path": "registry/ui/product-ui.tsx", "type": "registry:ui", "target": "~/src/components/ui/product-ui.tsx" },
+        { "path": "registry/ui/product/semantic.ts", "type": "registry:ui", "target": "~/src/components/ui/product/semantic.ts" },
+        { "path": "registry/ui/product/information.tsx", "type": "registry:ui", "target": "~/src/components/ui/product/information.tsx" },
+        { "path": "registry/ui/product/chart.tsx", "type": "registry:ui", "target": "~/src/components/ui/product/chart.tsx" },
+        { "path": "registry/ui/product/artifact.tsx", "type": "registry:ui", "target": "~/src/components/ui/product/artifact.tsx" }
       ]
     }
   ]
