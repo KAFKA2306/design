@@ -15,6 +15,8 @@ export const MANAGED_SOURCES = Object.freeze([
   { source: 'styles/tokens.css', target: 'kafka-tokens.css' },
   { source: 'styles/globals.css', target: 'kafka-globals.css' },
   { source: 'styles/components.css', target: 'kafka-components.css' },
+  { source: 'scripts/portable-conformance.mjs', target: 'portable-conformance.mjs' },
+  { source: 'scripts/conformance-policy.mjs', target: 'conformance-policy.mjs' },
 ])
 
 const CONFIG_KEYS = new Set(['$schema', 'schemaVersion', 'designSha', 'preset', 'cssEntry', 'managedDir', 'logo'])
@@ -158,7 +160,7 @@ export function buildResolvedManifest(consumerRoot, config) {
 export function buildIntegrationBlock(consumerRoot, config, managedFiles) {
   const cssEntryPath = resolveWithin(consumerRoot, config.cssEntry, `${CONFIG_NAME}.cssEntry`)
   const cssDir = path.dirname(cssEntryPath)
-  const imports = managedFiles.map(({ targetPath }) => {
+  const imports = managedFiles.filter(({ source }) => source.endsWith('.css')).map(({ targetPath }) => {
     let relative = toPosix(path.relative(cssDir, targetPath))
     if (!relative.startsWith('.')) relative = `./${relative}`
     return `@import "${relative}";`
