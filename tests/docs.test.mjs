@@ -17,6 +17,7 @@ const canonicalReferences = [
   ['registry/ui/product/', 'registry/ui/product'],
   ['registry/ui/product/chart.tsx', 'registry/ui/product/chart.tsx'],
   ['registry/ui/product/journey.ts', 'registry/ui/product/journey.ts'],
+  ['registry/ui/product/decision.tsx', 'registry/ui/product/decision.tsx'],
   ['artifacts/content.schema.json', 'artifacts/content.schema.json'],
   ['scripts/content-contract.mjs', 'scripts/content-contract.mjs'],
   ['schemas/design.config.schema.json', 'schemas/design.config.schema.json'],
@@ -76,11 +77,9 @@ test('AGENTS makes action-based journey selection a durable design invariant', (
   assert.match(agents, /same brand grammar and interaction quality across products without forcing the same dashboard shape/)
 })
 
-test('canonical reference surface keeps reference detail after the primary task content', () => {
+test('canonical reference surface consumes completed decision UI before supporting views and reference detail', () => {
   const orderedMarkers = [
-    'className="k-dashboard-header"',
-    'className="k-dashboard-decision"',
-    'className="k-dashboard-metrics"',
+    '<DecisionPanel',
     'id="overview"',
     'id="frontier"',
     'id="positions"',
