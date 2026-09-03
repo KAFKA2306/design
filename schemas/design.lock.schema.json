@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/KAFKA2306/design/schemas/design.lock.schema.json",
+  "title": "KAFKA2306 design applied-state lock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "designSha", "preset", "configHash", "manifestHash", "logoHash", "installedRegistryItems", "managedFiles", "integration"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "designSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "preset": { "enum": ["base", "financial-dashboard"] },
+    "configHash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "manifestHash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "logoHash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+    "installedRegistryItems": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "managedFiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "integration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cssEntry", "blockHash"],
+      "properties": {
+        "cssEntry": { "type": "string", "minLength": 1 },
+        "blockHash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}
