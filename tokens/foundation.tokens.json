@@ -1,13 +1,12 @@
 {
-  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
   "color": {
     "light": {
       "$type": "color",
-      "canvas": { "$value": { "colorSpace": "srgb", "components": [0.964706, 0.972549, 0.984314], "alpha": 1, "hex": "#F6F8FB" } },
+      "canvas": { "$value": { "colorSpace": "srgb", "components": [0.968627, 0.960784, 0.937255], "alpha": 1, "hex": "#F7F5EF" } },
       "surface": { "$value": { "colorSpace": "srgb", "components": [1, 1, 1], "alpha": 1, "hex": "#FFFFFF" } },
-      "foreground": { "$value": { "colorSpace": "srgb", "components": [0.066667, 0.094118, 0.152941], "alpha": 1, "hex": "#111827" } },
+      "foreground": { "$value": { "colorSpace": "srgb", "components": [0.090196, 0.137255, 0.247059], "alpha": 1, "hex": "#17233F" } },
       "mutedForeground": { "$value": { "colorSpace": "srgb", "components": [0.4, 0.439216, 0.521569], "alpha": 1, "hex": "#667085" } },
-      "border": { "$value": { "colorSpace": "srgb", "components": [0.85098, 0.882353, 0.917647], "alpha": 1, "hex": "#D9E1EA" } },
+      "border": { "$value": { "colorSpace": "srgb", "components": [0.85098, 0.839216, 0.807843], "alpha": 1, "hex": "#D9D6CE" } },
       "primary": { "$value": { "colorSpace": "srgb", "components": [0.145098, 0.388235, 0.921569], "alpha": 1, "hex": "#2563EB" } },
       "accent": { "$value": { "colorSpace": "srgb", "components": [0.490196, 0.827451, 0.988235], "alpha": 1, "hex": "#7DD3FC" } },
       "success": { "$value": { "colorSpace": "srgb", "components": [0.082353, 0.501961, 0.239216], "alpha": 1, "hex": "#15803D" } },
