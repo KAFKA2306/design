@@ -1,0 +1,29 @@
+{
+  "title": "Artifact contract fixture",
+  "keyMessage": "This file tests schema behavior only and is not a production result.",
+  "facts": [
+    {
+      "id": "measured-throughput",
+      "label": "Measured throughput",
+      "kind": "actual",
+      "value": 120,
+      "unit": "items/h",
+      "source": {
+        "name": "Synthetic contract fixture",
+        "reference": "UI and schema test only"
+      }
+    },
+    {
+      "id": "candidate-method",
+      "label": "Candidate method",
+      "kind": "unverified",
+      "text": "Promising in offline evaluation; runtime performance is not verified."
+    }
+  ],
+  "limitations": [
+    "Synthetic fixture; must not be presented as production evidence."
+  ],
+  "nextActions": [
+    "Use canonical source data when creating a real artifact."
+  ]
+}
