@@ -1,3 +1,34 @@
 @import "tailwindcss";
 
-body { margin: 0; }
+body {
+  margin: 0;
+}
+
+.consumer-specimen,
+.consumer-stack {
+  display: grid;
+  gap: var(--k-dimension-space4);
+}
+
+.consumer-specimen {
+  max-width: 56rem;
+}
+
+.consumer-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--k-dimension-space2);
+}
+
+.consumer-specimen section {
+  display: grid;
+  gap: var(--k-dimension-space2);
+  border-top: 1px solid var(--k-color-border);
+  padding-top: var(--k-dimension-space3);
+}
+
+.consumer-specimen h1,
+.consumer-specimen h2,
+.consumer-specimen p {
+  margin: 0;
+}

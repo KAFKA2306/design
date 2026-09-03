@@ -22,10 +22,11 @@ test('new consumers are pinned to Base UI implementation baseline and Lucide', (
 
 test('registry distributes generated web styles but not DTCG source authority', () => {
   const paths = base.files.map((file) => file.path);
-  assert.deepEqual(paths, ['styles/tokens.css', 'styles/globals.css']);
+  assert.deepEqual(paths, ['styles/tokens.css', 'styles/globals.css', 'styles/components.css']);
   assert.equal(paths.some((path) => path.startsWith('tokens/')), false);
   assert.equal(base.files[0].target, '~/src/styles/kafka-tokens.css');
   assert.equal(base.files[1].target, '~/src/styles/kafka-globals.css');
+  assert.equal(base.files[2].target, '~/src/styles/kafka-components.css');
 });
 
 test('shadcn semantic vars alias canonical tokens instead of duplicating colors', () => {
@@ -43,10 +44,11 @@ test('shadcn semantic vars alias canonical tokens instead of duplicating colors'
   assert.equal(base.cssVars.light.sidebar, 'var(--k-color-surface)');
 });
 
-test('registry imports generated foundation styles into consumer CSS entry', () => {
+test('registry imports generated foundation and component styles into consumer CSS entry', () => {
   assert.deepEqual(base.css, {
     '@import "./styles/kafka-tokens.css"': {},
     '@import "./styles/kafka-globals.css"': {},
+    '@import "./styles/kafka-components.css"': {},
   });
 });
 
