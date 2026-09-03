@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -25,6 +26,13 @@ function cleanup(root) {
   fs.rmSync(root, { recursive: true, force: true })
 }
 
+function runPortable(root) {
+  return spawnSync(process.execPath, [path.join(root, '.kafka-design', 'portable-conformance.mjs'), '--consumer', root], {
+    cwd: root,
+    encoding: 'utf8',
+  })
+}
+
 test('sync is deterministic and the second run is a zero diff', () => {
   const root = makeConsumer()
   try {
@@ -34,9 +42,14 @@ test('sync is deterministic and the second run is a zero diff', () => {
       '.kafka-design/kafka-tokens.css',
       '.kafka-design/kafka-globals.css',
       '.kafka-design/kafka-components.css',
+      '.kafka-design/portable-conformance.mjs',
+      '.kafka-design/conformance-policy.mjs',
       'styles.css',
       'design.lock.json',
     ]) assert.ok(first.changed.includes(expected), `${expected} must be managed on first sync`)
+
+    const styles = fs.readFileSync(path.join(root, 'styles.css'), 'utf8')
+    assert.doesNotMatch(styles, /\.mjs/)
 
     const before = new Map(first.changed.map((relativePath) => [relativePath, fs.readFileSync(path.join(root, relativePath), 'utf8')]))
     const second = syncConsumer(root)
@@ -44,6 +57,24 @@ test('sync is deterministic and the second run is a zero diff', () => {
     assert.deepEqual(second.deleted, [])
     for (const [relativePath, content] of before) assert.equal(fs.readFileSync(path.join(root, relativePath), 'utf8'), content)
     assert.deepEqual(checkConsumer(root), [])
+  } finally {
+    cleanup(root)
+  }
+})
+
+test('portable conformance runs entirely from the synced managed bundle', () => {
+  const root = makeConsumer()
+  try {
+    syncConsumer(root)
+    const clean = runPortable(root)
+    assert.equal(clean.status, 0, clean.stderr)
+    assert.match(clean.stdout, /design conformance: ok/)
+
+    fs.appendFileSync(path.join(root, 'styles.css'), '\n.bad { background: #123456; box-shadow: 0 1px 3px #000; }\n')
+    const drift = runPortable(root)
+    assert.equal(drift.status, 1)
+    assert.match(drift.stderr, /\[duplicate-visual-authority\] styles\.css/)
+    assert.match(drift.stderr, /\[forbidden-visual-effect\] styles\.css/)
   } finally {
     cleanup(root)
   }
