@@ -2,14 +2,14 @@
 
 Canonical Web UI authority for KAFKA2306 repositories.
 
-This repository owns shared visual rules, reusable UI source, interaction grammar, and canonical user-journey patterns. Consumer repositories own business logic, data logic, and raw usage telemetry; they consume this repository instead of creating a second UI authority.
+This repository owns shared visual rules, reusable UI source, completed purpose components, interaction grammar, and canonical user-journey patterns. Consumer repositories own business logic, data logic, and raw usage telemetry; they consume this repository instead of creating a second UI authority.
 
 ## Scope
 
 Owned here:
 
 - visual tokens and generated foundation styles
-- shared component and Product UI source
+- shared primitives and completed Product UI source
 - chart, table, navigation, responsive, accessibility, and state grammar
 - action-based user-journey patterns and recommendation contract
 - cross-format semantic/content contract used by Web UI
@@ -33,6 +33,7 @@ Not owned here:
 | Registry manifest | `registry.json` | registry CI |
 | UI implementation | `registry/ui/` | installed consumer copies |
 | Product UI public entrypoint | `registry/ui/product-ui.tsx` | implementation under `registry/ui/product/` |
+| Completed decision UI | `registry/ui/product/decision.tsx` | reference consumer + Product UI tests |
 | Product chart grammar | `registry/ui/product/chart.tsx` | Product UI fixture + contract tests |
 | User journey | `registry/ui/product/journey.ts` | Product UI tests + consumer aggregate inputs |
 | Semantic/content model | `artifacts/content.schema.json` | `scripts/content-contract.mjs` + synthetic fixture |
@@ -89,6 +90,8 @@ pnpm conformance --consumer <consumer-path>
 `conformance` fails with a rule name and file path when the immutable design pin, managed files/import block, visual authority, forbidden effects, core-component duplication, or chart ownership drift.
 
 A consumer chooses from canonical action-based journey candidates rather than inheriting a domain-specific dashboard shape. It may pass structural evidence and normalized aggregate importance/frequency signals to the Product UI journey API. Raw telemetry remains in the consumer.
+
+For recurring decision surfaces, use the completed Product UI component instead of rebuilding its title/status/action/measure/evidence hierarchy in the consumer.
 
 ## Documentation rule
 
