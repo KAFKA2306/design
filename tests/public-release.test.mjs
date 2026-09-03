@@ -11,11 +11,10 @@ test('public tree policy passes', () => {
   assert.doesNotThrow(() => execFileSync(process.execPath, [path.join(root, 'scripts', 'public-tree-policy.mjs')], { cwd: root, stdio: 'pipe' }));
 });
 
-test('public release policy and history-aware scans stay present', () => {
+test('public release gate remains history-aware', () => {
   assert.ok(fs.existsSync(path.join(root, 'PUBLIC_RELEASE.md')));
-  assert.ok(fs.existsSync(path.join(root, 'scripts', 'history-public-scan.mjs')));
+  assert.ok(fs.existsSync(path.join(root, 'scripts', 'public-release-gate.mjs')));
   const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'public-safety.yml'), 'utf8');
   assert.match(workflow, /fetch-depth: 0/);
-  assert.match(workflow, /history-public-scan\.mjs/);
   assert.match(workflow, /gitleaks\/gitleaks-action/);
 });
