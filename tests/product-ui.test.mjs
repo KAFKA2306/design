@@ -8,6 +8,7 @@ const styles = fs.readFileSync('styles/components.css', 'utf8')
 const fixture = fs.readFileSync('fixtures/registry-consumer/src/main.tsx', 'utf8')
 const fixtureStyles = fs.readFileSync('fixtures/registry-consumer/src/index.css', 'utf8')
 const consumerPackage = JSON.parse(fs.readFileSync('fixtures/registry-consumer/package.json', 'utf8'))
+const consumerTsconfig = JSON.parse(fs.readFileSync('fixtures/registry-consumer/tsconfig.json', 'utf8'))
 const product = registry.items.find((item) => item.name === 'kafka-product-ui')
 
 test('Product UI is one registry item with pinned chart dependencies', () => {
@@ -107,8 +108,10 @@ test('artifact viewer and gallery expose explicit fit, failure states and keyboa
   assert.match(source, /Generated/)
 })
 
-test('clean consumer build type-checks before rendering', () => {
+test('clean consumer build type-checks before rendering with TypeScript 7-compatible alias resolution', () => {
   assert.equal(consumerPackage.scripts.build, 'tsc --noEmit && vite build')
+  assert.equal(Object.hasOwn(consumerTsconfig.compilerOptions, 'baseUrl'), false)
+  assert.deepEqual(consumerTsconfig.compilerOptions.paths, { '@/*': ['./src/*'] })
 })
 
 test('Product UI source carries no raw visual color or forbidden decorative effect', () => {
