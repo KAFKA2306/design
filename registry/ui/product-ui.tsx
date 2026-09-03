@@ -24,6 +24,12 @@ export type {
   ComparisonSurfaceRole,
 } from './product/comparison'
 
+export { EvidenceSurface } from './product/evidence'
+export type {
+  EvidenceSurfaceProps,
+  EvidenceSurfaceRecord,
+} from './product/evidence'
+
 export {
   DEFAULT_JOURNEY_RECOMMENDATION_LIMIT,
   JOURNEY_ACTIONS,
