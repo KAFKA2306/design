@@ -8,6 +8,7 @@
     "tokens:validate": "node scripts/validate-tokens.mjs",
     "tokens:build": "node scripts/build-tokens.mjs",
     "tokens:check": "node scripts/check-generated.mjs",
+    "content:validate": "node scripts/content-contract.mjs fixtures/content/contract-example.json",
     "lint": "node scripts/lint.mjs && tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
     "build": "vite build"

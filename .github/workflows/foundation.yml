@@ -22,6 +22,8 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Validate token authority
         run: pnpm tokens:validate && pnpm tokens:check
+      - name: Validate artifact content contract
+        run: pnpm content:validate
       - name: Lint
         run: pnpm lint
       - name: Test
