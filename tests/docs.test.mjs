@@ -16,6 +16,7 @@ const canonicalReferences = [
   ['registry/ui/product-ui.tsx', 'registry/ui/product-ui.tsx'],
   ['registry/ui/product/', 'registry/ui/product'],
   ['registry/ui/product/chart.tsx', 'registry/ui/product/chart.tsx'],
+  ['registry/ui/product/journey.ts', 'registry/ui/product/journey.ts'],
   ['artifacts/content.schema.json', 'artifacts/content.schema.json'],
   ['scripts/content-contract.mjs', 'scripts/content-contract.mjs'],
   ['schemas/design.config.schema.json', 'schemas/design.config.schema.json'],
@@ -65,14 +66,17 @@ test('durable prose does not copy dependency version literals', () => {
   }
 })
 
-test('AGENTS makes user decision order a durable design invariant', () => {
-  assert.match(agents, /context\/identity -> current decision or status -> next action -> key measures or primary view -> supporting evidence\/drilldown -> source\/reference\/implementation details/)
+test('AGENTS makes action-based journey selection a durable design invariant', () => {
+  assert.match(agents, /inspect, compare, decide, act, and investigate/)
+  assert.match(agents, /Do not force one global reading order across every product/)
+  assert.match(agents, /Raw usage events remain consumer-owned/)
+  assert.match(agents, /visual hierarchy, information order, interaction, responsive behavior, accessibility, and state representation/)
   assert.match(agents, /Changelog, Recent Updates, implementation notes, debug information, roadmap/)
   assert.match(agents, /PLANNED or unavailable features must not visually compete with usable actions/)
-  assert.match(agents, /same information hierarchy and brand grammar across domains, not the same dashboard shape/)
+  assert.match(agents, /same brand grammar and interaction quality across products without forcing the same dashboard shape/)
 })
 
-test('canonical reference surface follows the primary reading path before reference detail', () => {
+test('canonical reference surface keeps reference detail after the primary task content', () => {
   const orderedMarkers = [
     'className="k-dashboard-header"',
     'className="k-dashboard-decision"',

@@ -6,6 +6,7 @@ const registry = JSON.parse(fs.readFileSync('registry.json', 'utf8'))
 const entry = fs.readFileSync('registry/ui/product-ui.tsx', 'utf8')
 const implementationPaths = [
   'registry/ui/product/semantic.ts',
+  'registry/ui/product/journey.ts',
   'registry/ui/product/information.tsx',
   'registry/ui/product/chart.tsx',
   'registry/ui/product/artifact.tsx',
@@ -25,6 +26,7 @@ test('Product UI stays one registry item while implementation is responsibility-
   assert.deepEqual(product.files, [
     { path: 'registry/ui/product-ui.tsx', type: 'registry:ui', target: '~/src/components/ui/product-ui.tsx' },
     { path: 'registry/ui/product/semantic.ts', type: 'registry:ui', target: '~/src/components/ui/product/semantic.ts' },
+    { path: 'registry/ui/product/journey.ts', type: 'registry:ui', target: '~/src/components/ui/product/journey.ts' },
     { path: 'registry/ui/product/information.tsx', type: 'registry:ui', target: '~/src/components/ui/product/information.tsx' },
     { path: 'registry/ui/product/chart.tsx', type: 'registry:ui', target: '~/src/components/ui/product/chart.tsx' },
     { path: 'registry/ui/product/artifact.tsx', type: 'registry:ui', target: '~/src/components/ui/product/artifact.tsx' },
@@ -34,6 +36,7 @@ test('Product UI stays one registry item while implementation is responsibility-
   assert.match(entry, /from '\.\/product\/information'/)
   assert.match(entry, /from '\.\/product\/chart'/)
   assert.match(entry, /from '\.\/product\/artifact'/)
+  assert.match(entry, /from '\.\/product\/journey'/)
 })
 
 test('all Product UI public patterns have one canonical implementation', () => {

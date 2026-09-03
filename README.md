@@ -1,8 +1,8 @@
 # KAFKA2306/design
 
-Canonical frontend visual authority for KAFKA2306 repositories.
+Canonical Web UI authority for KAFKA2306 repositories.
 
-This repository owns shared visual rules and reusable UI source. Consumer repositories own business and data logic; they consume this repository instead of creating a second visual authority.
+This repository owns shared visual rules, reusable UI source, interaction grammar, and canonical user-journey patterns. Consumer repositories own business logic, data logic, and raw usage telemetry; they consume this repository instead of creating a second UI authority.
 
 ## Scope
 
@@ -10,15 +10,18 @@ Owned here:
 
 - visual tokens and generated foundation styles
 - shared component and Product UI source
-- chart grammar and interaction patterns
-- cross-format semantic/content contract
+- chart, table, navigation, responsive, accessibility, and state grammar
+- action-based user-journey patterns and recommendation contract
+- cross-format semantic/content contract used by Web UI
 - deterministic consumer sync and conformance checks
 - synthetic reference fixtures and verification workflows
 
 Not owned here:
 
 - consumer-specific business or data logic
-- consumer-specific copies of palette, radius, shadow, or chart geometry
+- consumer raw usage-event collection or storage
+- consumer-specific copies of palette, radius, shadow, chart geometry, or design-owned purpose components
+- PPTX / SVG / Mermaid authoring systems
 - confidential employer, customer, or project content
 
 ## Authority map
@@ -31,6 +34,7 @@ Not owned here:
 | UI implementation | `registry/ui/` | installed consumer copies |
 | Product UI public entrypoint | `registry/ui/product-ui.tsx` | implementation under `registry/ui/product/` |
 | Product chart grammar | `registry/ui/product/chart.tsx` | Product UI fixture + contract tests |
+| User journey | `registry/ui/product/journey.ts` | Product UI tests + consumer aggregate inputs |
 | Semantic/content model | `artifacts/content.schema.json` | `scripts/content-contract.mjs` + synthetic fixture |
 | Consumer adoption config | `schemas/design.config.schema.json` | consumer `design.config.json` |
 | Applied design state | `schemas/design.lock.schema.json` | generated consumer `design.lock.json` |
@@ -84,7 +88,7 @@ pnpm conformance --consumer <consumer-path>
 
 `conformance` fails with a rule name and file path when the immutable design pin, managed files/import block, visual authority, forbidden effects, core-component duplication, or chart ownership drift.
 
-The consumer keeps domain-specific layout and business logic. It does not get a forced dashboard shape; the shared user-journey and brand rules are defined in `AGENTS.md`.
+A consumer chooses from canonical action-based journey candidates rather than inheriting a domain-specific dashboard shape. It may pass structural evidence and normalized aggregate importance/frequency signals to the Product UI journey API. Raw telemetry remains in the consumer.
 
 ## Documentation rule
 
