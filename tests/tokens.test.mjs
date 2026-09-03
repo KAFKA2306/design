@@ -25,6 +25,15 @@ test('generated CSS is deterministic', () => {
   assert.equal(generateCss(root), generateCss(JSON.parse(JSON.stringify(root))));
 });
 
+test('generated CSS follows system dark mode unless a theme is explicit', () => {
+  const css = generateCss(readTokens());
+  assert.match(css, /@media \(prefers-color-scheme: dark\)/);
+  assert.match(css, /:root:not\(\[data-theme\]\)/);
+  assert.match(css, /\[data-theme="dark"\]/);
+  assert.match(css, /color-scheme: light;/);
+  assert.match(css, /color-scheme: dark;/);
+});
+
 test('invalid aliases fail loudly', () => {
   const root = readTokens();
   root.color.light.focus.$value = '{color.light.doesNotExist}';
