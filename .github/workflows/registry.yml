@@ -40,6 +40,7 @@ jobs:
           test -f .registry-build/kafka-input.json
           test -f .registry-build/kafka-dialog.json
           test -f .registry-build/kafka-tabs.json
+          test -f .registry-build/kafka-product-ui.json
       - name: View built registry items
         run: |
           pnpm dlx shadcn@${SHADCN_VERSION} view ./.registry-build/kafka-base.json
@@ -47,27 +48,30 @@ jobs:
           pnpm dlx shadcn@${SHADCN_VERSION} view ./.registry-build/kafka-input.json
           pnpm dlx shadcn@${SHADCN_VERSION} view ./.registry-build/kafka-dialog.json
           pnpm dlx shadcn@${SHADCN_VERSION} view ./.registry-build/kafka-tabs.json
+          pnpm dlx shadcn@${SHADCN_VERSION} view ./.registry-build/kafka-product-ui.json
       - name: Install initialized clean consumer dependencies
         run: |
           test -f fixtures/registry-consumer/components.json
           pnpm --dir fixtures/registry-consumer install --lockfile=false
       - name: Install kafka-base
         run: pnpm dlx shadcn@${SHADCN_VERSION} add "$GITHUB_WORKSPACE/.registry-build/kafka-base.json" --yes --cwd fixtures/registry-consumer
-      - name: Dry-run Core UI install
+      - name: Dry-run UI install
         run: |
           pnpm dlx shadcn@${SHADCN_VERSION} add \
             "$GITHUB_WORKSPACE/.registry-build/kafka-button.json" \
             "$GITHUB_WORKSPACE/.registry-build/kafka-input.json" \
             "$GITHUB_WORKSPACE/.registry-build/kafka-dialog.json" \
             "$GITHUB_WORKSPACE/.registry-build/kafka-tabs.json" \
+            "$GITHUB_WORKSPACE/.registry-build/kafka-product-ui.json" \
             --dry-run --cwd fixtures/registry-consumer
-      - name: Install Core UI
+      - name: Install UI
         run: |
           pnpm dlx shadcn@${SHADCN_VERSION} add \
             "$GITHUB_WORKSPACE/.registry-build/kafka-button.json" \
             "$GITHUB_WORKSPACE/.registry-build/kafka-input.json" \
             "$GITHUB_WORKSPACE/.registry-build/kafka-dialog.json" \
             "$GITHUB_WORKSPACE/.registry-build/kafka-tabs.json" \
+            "$GITHUB_WORKSPACE/.registry-build/kafka-product-ui.json" \
             --yes --cwd fixtures/registry-consumer
       - name: Verify installed authority
         run: |
@@ -78,12 +82,13 @@ jobs:
           test -f fixtures/registry-consumer/src/components/ui/input.tsx
           test -f fixtures/registry-consumer/src/components/ui/dialog.tsx
           test -f fixtures/registry-consumer/src/components/ui/tabs.tsx
+          test -f fixtures/registry-consumer/src/components/ui/product-ui.tsx
           grep -F '@import "./styles/kafka-tokens.css"' fixtures/registry-consumer/src/index.css
           grep -F '@import "./styles/kafka-globals.css"' fixtures/registry-consumer/src/index.css
           grep -F '@import "./styles/kafka-components.css"' fixtures/registry-consumer/src/index.css
           grep -F '"style": "base-nova"' fixtures/registry-consumer/components.json
           grep -F '"iconLibrary": "lucide"' fixtures/registry-consumer/components.json
-          node -e "const p=require('./fixtures/registry-consumer/package.json'); if(p.dependencies?.['@base-ui/react']!=='1.7.0') throw new Error('expected @base-ui/react 1.7.0, got '+p.dependencies?.['@base-ui/react'])"
+          node -e "const p=require('./fixtures/registry-consumer/package.json'); if(p.dependencies?.['@base-ui/react']!=='1.7.0') throw new Error('expected @base-ui/react 1.7.0, got '+p.dependencies?.['@base-ui/react']); if(p.dependencies?.recharts!=='3.10.1') throw new Error('expected recharts 3.10.1, got '+p.dependencies?.recharts); if(p.dependencies?.['react-is']!=='19.2.8') throw new Error('expected react-is 19.2.8, got '+p.dependencies?.['react-is'])"
           test ! -e fixtures/registry-consumer/tokens/foundation.tokens.json
       - name: Build installed consumer
         run: pnpm --dir fixtures/registry-consumer build

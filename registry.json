@@ -83,6 +83,16 @@
       "files": [
         { "path": "registry/ui/tabs.tsx", "type": "registry:ui", "target": "~/src/components/ui/tabs.tsx" }
       ]
+    },
+    {
+      "name": "kafka-product-ui",
+      "type": "registry:ui",
+      "title": "Product UI",
+      "description": "Canonical high-density information, chart, table, and artifact patterns.",
+      "dependencies": ["recharts@3.10.1", "react-is@19.2.8"],
+      "files": [
+        { "path": "registry/ui/product-ui.tsx", "type": "registry:ui", "target": "~/src/components/ui/product-ui.tsx" }
+      ]
     }
   ]
 }

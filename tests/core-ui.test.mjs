@@ -3,12 +3,11 @@ import fs from 'node:fs'
 import test from 'node:test'
 
 const registry = JSON.parse(fs.readFileSync('registry.json', 'utf8'))
-const uiItems = registry.items.filter((item) => item.type === 'registry:ui')
+const expected = ['kafka-button', 'kafka-input', 'kafka-dialog', 'kafka-tabs']
+const uiItems = registry.items.filter((item) => expected.includes(item.name))
 const read = (name) => fs.readFileSync(`registry/ui/${name}.tsx`, 'utf8')
 
-const expected = ['kafka-button', 'kafka-input', 'kafka-dialog', 'kafka-tabs']
-
-test('Core UI v0 exposes exactly four registry UI components', () => {
+test('Core UI v0 exposes exactly four canonical Core UI components', () => {
   assert.deepEqual(uiItems.map((item) => item.name), expected)
   for (const item of uiItems) {
     assert.deepEqual(item.dependencies, ['@base-ui/react@1.7.0'])

@@ -1,9 +1,11 @@
-# Repository instructions
+# Repository authority
 
-`tokens/foundation.tokens.json` is the visual value authority. Generated `styles/tokens.css` must match it byte-for-byte.
-
-Current user-approved v0 anchors are warm off-white canvas `#F7F5EF`, dark-navy foreground `#17233F`, blue primary `#2563EB`, light-blue accent `#7DD3FC`, 30px table rows, and no shadow.
-
-Do not change visual anchors because an older Issue, README, benchmark, or generated file says otherwise. A visual-anchor change requires an explicit current user request; update token source, generated output, invariant tests, dependent registry aliases, and visual regression together.
-
-Prefer deleting or merging stale design descriptions instead of creating another authority.
+- `main` is the only long-lived authority.
+- Current explicit user direction overrides stale issue prose or old branches.
+- `tokens/foundation.tokens.json` is the only hand-edited visual-token authority; generated styles must be regenerated, not hand-edited.
+- `artifacts/content.schema.json` is the only cross-format semantic/content authority. UI components may render its fields but must not create a competing verification or provenance model.
+- Registry component source lives once under `registry/ui/`; consumer copies are generated/installed artifacts.
+- Product charts use the centrally configured Recharts adapter in `registry/ui/product-ui.tsx`; consumers must not redefine palette, grid, line geometry, actual/forecast styling, tooltip, or chart spacing.
+- Do not commit employer, customer, internal-project, or other confidential names, values, sources, masters, images, screenshots, summaries, or derived information. Repository fixtures must be synthetic/test-only.
+- Fail loudly rather than silently falling back when canonical input is missing or malformed.
+- One active work item uses at most one branch. Merge/closed PR branches are disposable; do not use stale branches as authority.
