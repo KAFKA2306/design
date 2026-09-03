@@ -4,9 +4,11 @@ import test from 'node:test'
 
 const registry = JSON.parse(fs.readFileSync('registry.json', 'utf8'))
 const entry = fs.readFileSync('registry/ui/product-ui.tsx', 'utf8')
+const decision = fs.readFileSync('registry/ui/product/decision.tsx', 'utf8')
 const implementationPaths = [
   'registry/ui/product/semantic.ts',
   'registry/ui/product/journey.ts',
+  'registry/ui/product/decision.tsx',
   'registry/ui/product/information.tsx',
   'registry/ui/product/chart.tsx',
   'registry/ui/product/artifact.tsx',
@@ -27,6 +29,7 @@ test('Product UI stays one registry item while implementation is responsibility-
     { path: 'registry/ui/product-ui.tsx', type: 'registry:ui', target: '~/src/components/ui/product-ui.tsx' },
     { path: 'registry/ui/product/semantic.ts', type: 'registry:ui', target: '~/src/components/ui/product/semantic.ts' },
     { path: 'registry/ui/product/journey.ts', type: 'registry:ui', target: '~/src/components/ui/product/journey.ts' },
+    { path: 'registry/ui/product/decision.tsx', type: 'registry:ui', target: '~/src/components/ui/product/decision.tsx' },
     { path: 'registry/ui/product/information.tsx', type: 'registry:ui', target: '~/src/components/ui/product/information.tsx' },
     { path: 'registry/ui/product/chart.tsx', type: 'registry:ui', target: '~/src/components/ui/product/chart.tsx' },
     { path: 'registry/ui/product/artifact.tsx', type: 'registry:ui', target: '~/src/components/ui/product/artifact.tsx' },
@@ -36,6 +39,7 @@ test('Product UI stays one registry item while implementation is responsibility-
   assert.match(entry, /from '\.\/product\/information'/)
   assert.match(entry, /from '\.\/product\/chart'/)
   assert.match(entry, /from '\.\/product\/artifact'/)
+  assert.match(entry, /from '\.\/product\/decision'/)
   assert.match(entry, /from '\.\/product\/journey'/)
 })
 
@@ -45,6 +49,7 @@ test('all Product UI public patterns have one canonical implementation', () => {
     'SourceLine',
     'FilterToolbar',
     'DataTable',
+    'DecisionPanel',
     'ChartFrame',
     'ChartGrid',
     'ArtifactViewer',
@@ -54,6 +59,31 @@ test('all Product UI public patterns have one canonical implementation', () => {
     assert.match(source, new RegExp(`export function ${name}\\b`), `${name} must be exported once`)
     assert.equal((source.match(new RegExp(`export function ${name}\\b`, 'g')) ?? []).length, 1)
   }
+})
+
+test('DecisionPanel fixes hierarchy, information order, interaction, state and evidence disclosure', () => {
+  const orderedMarkers = [
+    'className="k-dashboard-header"',
+    'className="k-dashboard-decision"',
+    'className="k-dialog-actions"',
+    'className="k-dashboard-metrics"',
+    'className="k-dashboard-brief"',
+  ]
+  let previous = -1
+  for (const marker of orderedMarkers) {
+    const current = decision.indexOf(marker)
+    assert.ok(current > previous, `${marker} must stay after the previous completed-component stage`)
+    previous = current
+  }
+  assert.match(decision, /data-component="decision-panel"/)
+  assert.match(decision, /data-state=\{state\}/)
+  assert.match(decision, /role="status" aria-live="polite"/)
+  assert.match(decision, /primaryAction: DecisionPanelAction/)
+  assert.match(decision, /disabled=\{primaryAction\.disabled\}/)
+  assert.match(decision, /<Metric key=/)
+  assert.match(decision, /<SourceLine source=\{source\}/)
+  assert.match(decision, /<details className="k-dashboard-brief">/)
+  assert.doesNotMatch(decision, /children\?:/)
 })
 
 test('semantic fact/source rendering does not create a competing schema or verification badge model', () => {
@@ -93,13 +123,16 @@ test('one ChartFrame owns line, bar and scatter grammar', () => {
   assert.doesNotMatch(fixture, /<(?:LineChart|BarChart|ScatterChart)\b/)
 })
 
-test('canonical dashboard composes existing Product UI instead of creating duplicate components', () => {
+test('canonical dashboard consumes completed Product UI instead of rebuilding decision hierarchy', () => {
   assert.match(fixture, /className="k-dashboard"/)
-  assert.match(fixture, /className="k-dashboard-metrics"/)
+  assert.match(fixture, /<DecisionPanel\b/)
   assert.match(fixture, /variant="bar"/)
   assert.match(fixture, /variant="scatter"/)
   assert.match(fixture, /No rebalance required/)
+  assert.match(fixture, /Review decision/)
   assert.match(fixture, /120-row density fixture/)
+  assert.doesNotMatch(fixture, /className="k-dashboard-decision"/)
+  assert.doesNotMatch(fixture, /<Metric\b/)
   assert.doesNotMatch(fixtureStyles, /max-width:\s*56rem/)
 })
 
