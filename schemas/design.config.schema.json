@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/KAFKA2306/design/schemas/design.config.schema.json",
+  "title": "KAFKA2306 design consumer config",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "designSha", "preset", "cssEntry", "managedDir"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "designSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "preset": { "enum": ["base", "financial-dashboard"] },
+    "cssEntry": { "type": "string", "minLength": 1 },
+    "managedDir": { "type": "string", "minLength": 1 },
+    "logo": { "type": "string", "minLength": 1 }
+  }
+}
