@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 
 const API = 'https://api.github.com'
+const MISSING_REFERENCE = Symbol('missing-reference')
 
 export function branchesToDelete({ branches, defaultBranch, openPullRequests }) {
   const protectedHeads = new Set(
@@ -15,23 +16,36 @@ export function branchesToDelete({ branches, defaultBranch, openPullRequests }) 
     .sort()
 }
 
+export function isMissingReferenceResponse(status, body) {
+  if (status !== 422) return false
+  try {
+    return JSON.parse(body)?.message === 'Reference does not exist'
+  } catch {
+    return false
+  }
+}
+
 async function request(path, options = {}) {
   const token = process.env.GITHUB_TOKEN
   if (!token) throw new Error('GITHUB_TOKEN is required')
 
+  const { allowMissingReference = false, ...fetchOptions } = options
   const response = await fetch(`${API}${path}`, {
-    ...options,
+    ...fetchOptions,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${token}`,
       'X-GitHub-Api-Version': '2022-11-28',
-      ...options.headers,
+      ...fetchOptions.headers,
     },
   })
 
   if (response.status === 204) return null
   const body = await response.text()
-  if (!response.ok) throw new Error(`${options.method ?? 'GET'} ${path} failed: ${response.status} ${body}`)
+  if (!response.ok) {
+    if (allowMissingReference && isMissingReferenceResponse(response.status, body)) return MISSING_REFERENCE
+    throw new Error(`${fetchOptions.method ?? 'GET'} ${path} failed: ${response.status} ${body}`)
+  }
   return body ? JSON.parse(body) : null
 }
 
@@ -49,8 +63,11 @@ async function listAll(path) {
 async function deleteBranch(repository, branch) {
   if (!branch || branch === 'main') throw new Error(`Refusing to delete unsafe branch: ${branch}`)
   const encoded = branch.split('/').map(encodeURIComponent).join('/')
-  await request(`/repos/${repository}/git/refs/heads/${encoded}`, { method: 'DELETE' })
-  console.log(`deleted ${branch}`)
+  const result = await request(`/repos/${repository}/git/refs/heads/${encoded}`, {
+    method: 'DELETE',
+    allowMissingReference: true,
+  })
+  console.log(result === MISSING_REFERENCE ? `already absent ${branch}` : `deleted ${branch}`)
 }
 
 async function run() {
