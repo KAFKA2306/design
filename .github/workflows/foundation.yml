@@ -1,0 +1,24 @@
+name: foundation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate tokens
+        run: node scripts/validate-tokens.mjs
+      - name: Check generated CSS drift
+        run: node scripts/check-generated.mjs
+      - name: Test token invariants
+        run: node --test tests/*.test.mjs
