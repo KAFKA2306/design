@@ -7,12 +7,14 @@ const entry = fs.readFileSync('registry/ui/product-ui.tsx', 'utf8')
 const decision = fs.readFileSync('registry/ui/product/decision.tsx', 'utf8')
 const comparison = fs.readFileSync('registry/ui/product/comparison.tsx', 'utf8')
 const evidence = fs.readFileSync('registry/ui/product/evidence.tsx', 'utf8')
+const status = fs.readFileSync('registry/ui/product/status.tsx', 'utf8')
 const implementationPaths = [
   'registry/ui/product/semantic.ts',
   'registry/ui/product/journey.ts',
   'registry/ui/product/decision.tsx',
   'registry/ui/product/comparison.tsx',
   'registry/ui/product/evidence.tsx',
+  'registry/ui/product/status.tsx',
   'registry/ui/product/information.tsx',
   'registry/ui/product/chart.tsx',
   'registry/ui/product/artifact.tsx',
@@ -36,6 +38,7 @@ test('Product UI stays one registry item while implementation is responsibility-
     { path: 'registry/ui/product/decision.tsx', type: 'registry:ui', target: '~/src/components/ui/product/decision.tsx' },
     { path: 'registry/ui/product/comparison.tsx', type: 'registry:ui', target: '~/src/components/ui/product/comparison.tsx' },
     { path: 'registry/ui/product/evidence.tsx', type: 'registry:ui', target: '~/src/components/ui/product/evidence.tsx' },
+    { path: 'registry/ui/product/status.tsx', type: 'registry:ui', target: '~/src/components/ui/product/status.tsx' },
     { path: 'registry/ui/product/information.tsx', type: 'registry:ui', target: '~/src/components/ui/product/information.tsx' },
     { path: 'registry/ui/product/chart.tsx', type: 'registry:ui', target: '~/src/components/ui/product/chart.tsx' },
     { path: 'registry/ui/product/artifact.tsx', type: 'registry:ui', target: '~/src/components/ui/product/artifact.tsx' },
@@ -48,6 +51,7 @@ test('Product UI stays one registry item while implementation is responsibility-
   assert.match(entry, /from '\.\/product\/decision'/)
   assert.match(entry, /from '\.\/product\/comparison'/)
   assert.match(entry, /from '\.\/product\/evidence'/)
+  assert.match(entry, /from '\.\/product\/status'/)
   assert.match(entry, /from '\.\/product\/journey'/)
 })
 
@@ -60,6 +64,7 @@ test('all Product UI public patterns have one canonical implementation', () => {
     'DecisionPanel',
     'ComparisonSurface',
     'EvidenceSurface',
+    'StatusSurface',
     'ChartFrame',
     'ChartGrid',
     'ArtifactViewer',
@@ -148,6 +153,34 @@ test('EvidenceSurface fixes identity -> source/as-of -> provenance -> link order
   assert.doesNotMatch(evidence, /children\?:/)
 })
 
+test('StatusSurface fixes status -> reason -> next action -> source order while reusing central action/state grammar', () => {
+  const orderedMarkers = [
+    'data-status-stage="identity"',
+    'data-status-stage="reason"',
+    'data-status-stage="action"',
+    'data-status-stage="source"',
+  ]
+  let previous = -1
+  for (const marker of orderedMarkers) {
+    const current = status.indexOf(marker)
+    assert.ok(current > previous, `${marker} must stay after the previous status stage`)
+    previous = current
+  }
+  assert.match(status, /data-component="status-surface"/)
+  assert.match(status, /StatusSurfaceTone = DecisionPanelState/)
+  assert.match(status, /action\?: DecisionPanelAction/)
+  assert.match(status, /status: string/)
+  assert.match(status, /Reason not provided/)
+  assert.match(status, /No next action provided/)
+  assert.match(status, /tone === 'blocked' \? 'alert' : 'status'/)
+  assert.match(status, /disabled=\{item\.action\.disabled\}/)
+  assert.match(status, /onClick=\{item\.action\.onClick\}/)
+  assert.match(status, /<SourceLine source=\{item\.source\}/)
+  assert.match(status, /items\.length === 0/)
+  assert.doesNotMatch(status, /VERIFIED|UNVERIFIED|TEST_ONLY|PASS|FAIL|BLOCKED/)
+  assert.doesNotMatch(status, /children\?:/)
+})
+
 test('semantic fact/source rendering does not create a competing schema or verification badge model', () => {
   assert.match(source, /type SemanticRecord = Readonly<Record<string, unknown>>/)
   assert.doesNotMatch(source, /interface\s+(?:Fact|Source|Evidence)|type\s+(?:Fact|Source|Evidence)\s*=/)
@@ -185,14 +218,16 @@ test('one ChartFrame owns line, bar and scatter grammar', () => {
   assert.doesNotMatch(fixture, /<(?:LineChart|BarChart|ScatterChart)\b/)
 })
 
-test('canonical dashboard consumes completed Product UI instead of rebuilding decision/evidence hierarchy', () => {
+test('canonical dashboard consumes completed Product UI instead of rebuilding decision/status/evidence hierarchy', () => {
   assert.match(fixture, /className="k-dashboard"/)
   assert.match(fixture, /<DecisionPanel\b/)
+  assert.match(fixture, /<StatusSurface\b/)
   assert.match(fixture, /<EvidenceSurface\b/)
   assert.match(fixture, /variant="bar"/)
   assert.match(fixture, /variant="scatter"/)
   assert.match(fixture, /No rebalance required/)
   assert.match(fixture, /Review decision/)
+  assert.match(fixture, /Portfolio checks/)
   assert.match(fixture, /Source boundary/)
   assert.match(fixture, /120-row density fixture/)
   assert.doesNotMatch(fixture, /className="k-dashboard-decision"/)
