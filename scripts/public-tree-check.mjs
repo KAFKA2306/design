@@ -5,7 +5,7 @@ import { publicForbiddenPatterns } from './public-policy.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const excludedDirectories = new Set(['.git', 'node_modules', 'dist']);
-const excludedFiles = new Set(['scripts/public-policy.mjs']);
+const excludedFiles = new Set(['scripts/public-policy.mjs', 'scripts/public-policy-check.mjs']);
 const extensions = new Set(['.md', '.json', '.mjs', '.js', '.ts', '.tsx', '.css', '.html', '.yml', '.yaml']);
 function walk(dir) { return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => { if (excludedDirectories.has(e.name)) return []; const f = path.join(dir, e.name); return e.isDirectory() ? walk(f) : [f]; }); }
 const findings = [];
