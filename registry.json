@@ -48,7 +48,6 @@
       "type": "registry:ui",
       "title": "Button",
       "description": "Canonical Base UI button with disabled and loading states.",
-      "registryDependencies": ["kafka-base"],
       "dependencies": ["@base-ui/react@1.7.0"],
       "files": [
         { "path": "registry/ui/button.tsx", "type": "registry:ui", "target": "~/src/components/ui/button.tsx" }
@@ -59,7 +58,6 @@
       "type": "registry:ui",
       "title": "Input",
       "description": "Canonical Base UI input with label and explicit error message.",
-      "registryDependencies": ["kafka-base"],
       "dependencies": ["@base-ui/react@1.7.0"],
       "files": [
         { "path": "registry/ui/input.tsx", "type": "registry:ui", "target": "~/src/components/ui/input.tsx" }
@@ -70,10 +68,10 @@
       "type": "registry:ui",
       "title": "Dialog",
       "description": "Canonical Base UI modal dialog using shared Button controls.",
-      "registryDependencies": ["kafka-base", "kafka-button"],
       "dependencies": ["@base-ui/react@1.7.0"],
       "files": [
-        { "path": "registry/ui/dialog.tsx", "type": "registry:ui", "target": "~/src/components/ui/dialog.tsx" }
+        { "path": "registry/ui/dialog.tsx", "type": "registry:ui", "target": "~/src/components/ui/dialog.tsx" },
+        { "path": "registry/ui/button.tsx", "type": "registry:ui", "target": "~/src/components/ui/button.tsx" }
       ]
     },
     {
@@ -81,7 +79,6 @@
       "type": "registry:ui",
       "title": "Tabs",
       "description": "Canonical Base UI tabs with keyboard selection semantics.",
-      "registryDependencies": ["kafka-base"],
       "dependencies": ["@base-ui/react@1.7.0"],
       "files": [
         { "path": "registry/ui/tabs.tsx", "type": "registry:ui", "target": "~/src/components/ui/tabs.tsx" }
