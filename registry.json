@@ -148,13 +148,14 @@
       "name": "kafka-product-ui",
       "type": "registry:ui",
       "title": "Product UI",
-      "description": "Canonical high-density information, completed decision, chart, table, artifact, and action-based journey patterns.",
+      "description": "Canonical high-density information, completed decision/comparison, chart, table, artifact, and action-based journey patterns.",
       "dependencies": ["recharts@3.10.1", "react-is@19.2.8"],
       "files": [
         { "path": "registry/ui/product-ui.tsx", "type": "registry:ui", "target": "~/src/components/ui/product-ui.tsx" },
         { "path": "registry/ui/product/semantic.ts", "type": "registry:ui", "target": "~/src/components/ui/product/semantic.ts" },
         { "path": "registry/ui/product/journey.ts", "type": "registry:ui", "target": "~/src/components/ui/product/journey.ts" },
         { "path": "registry/ui/product/decision.tsx", "type": "registry:ui", "target": "~/src/components/ui/product/decision.tsx" },
+        { "path": "registry/ui/product/comparison.tsx", "type": "registry:ui", "target": "~/src/components/ui/product/comparison.tsx" },
         { "path": "registry/ui/product/information.tsx", "type": "registry:ui", "target": "~/src/components/ui/product/information.tsx" },
         { "path": "registry/ui/product/chart.tsx", "type": "registry:ui", "target": "~/src/components/ui/product/chart.tsx" },
         { "path": "registry/ui/product/artifact.tsx", "type": "registry:ui", "target": "~/src/components/ui/product/artifact.tsx" }

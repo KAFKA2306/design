@@ -15,6 +15,15 @@ export type {
   DecisionPanelState,
 } from './product/decision'
 
+export { ComparisonSurface } from './product/comparison'
+export type {
+  ComparisonSurfaceEvidence,
+  ComparisonSurfaceMetric,
+  ComparisonSurfaceOption,
+  ComparisonSurfaceProps,
+  ComparisonSurfaceRole,
+} from './product/comparison'
+
 export {
   DEFAULT_JOURNEY_RECOMMENDATION_LIMIT,
   JOURNEY_ACTIONS,

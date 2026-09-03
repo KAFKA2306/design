@@ -5,10 +5,12 @@ import test from 'node:test'
 const registry = JSON.parse(fs.readFileSync('registry.json', 'utf8'))
 const entry = fs.readFileSync('registry/ui/product-ui.tsx', 'utf8')
 const decision = fs.readFileSync('registry/ui/product/decision.tsx', 'utf8')
+const comparison = fs.readFileSync('registry/ui/product/comparison.tsx', 'utf8')
 const implementationPaths = [
   'registry/ui/product/semantic.ts',
   'registry/ui/product/journey.ts',
   'registry/ui/product/decision.tsx',
+  'registry/ui/product/comparison.tsx',
   'registry/ui/product/information.tsx',
   'registry/ui/product/chart.tsx',
   'registry/ui/product/artifact.tsx',
@@ -30,6 +32,7 @@ test('Product UI stays one registry item while implementation is responsibility-
     { path: 'registry/ui/product/semantic.ts', type: 'registry:ui', target: '~/src/components/ui/product/semantic.ts' },
     { path: 'registry/ui/product/journey.ts', type: 'registry:ui', target: '~/src/components/ui/product/journey.ts' },
     { path: 'registry/ui/product/decision.tsx', type: 'registry:ui', target: '~/src/components/ui/product/decision.tsx' },
+    { path: 'registry/ui/product/comparison.tsx', type: 'registry:ui', target: '~/src/components/ui/product/comparison.tsx' },
     { path: 'registry/ui/product/information.tsx', type: 'registry:ui', target: '~/src/components/ui/product/information.tsx' },
     { path: 'registry/ui/product/chart.tsx', type: 'registry:ui', target: '~/src/components/ui/product/chart.tsx' },
     { path: 'registry/ui/product/artifact.tsx', type: 'registry:ui', target: '~/src/components/ui/product/artifact.tsx' },
@@ -40,6 +43,7 @@ test('Product UI stays one registry item while implementation is responsibility-
   assert.match(entry, /from '\.\/product\/chart'/)
   assert.match(entry, /from '\.\/product\/artifact'/)
   assert.match(entry, /from '\.\/product\/decision'/)
+  assert.match(entry, /from '\.\/product\/comparison'/)
   assert.match(entry, /from '\.\/product\/journey'/)
 })
 
@@ -50,6 +54,7 @@ test('all Product UI public patterns have one canonical implementation', () => {
     'FilterToolbar',
     'DataTable',
     'DecisionPanel',
+    'ComparisonSurface',
     'ChartFrame',
     'ChartGrid',
     'ArtifactViewer',
@@ -84,6 +89,31 @@ test('DecisionPanel fixes hierarchy, information order, interaction, state and e
   assert.match(decision, /<SourceLine source=\{source\}/)
   assert.match(decision, /<details className="k-dashboard-brief">/)
   assert.doesNotMatch(decision, /children\?:/)
+})
+
+test('ComparisonSurface fixes option -> same-scale measures -> evidence order without computing business semantics', () => {
+  const orderedMarkers = [
+    'data-comparison-stage="options"',
+    'data-comparison-stage="metrics"',
+    'data-comparison-stage="evidence"',
+  ]
+  let previous = -1
+  for (const marker of orderedMarkers) {
+    const current = comparison.indexOf(marker)
+    assert.ok(current > previous, `${marker} must stay after the previous comparison stage`)
+    previous = current
+  }
+  assert.match(comparison, /data-component="comparison-surface"/)
+  assert.match(comparison, /'baseline' \| 'current' \| 'candidate'/)
+  assert.match(comparison, /ComparisonSurface requires at least two comparison options/)
+  assert.match(comparison, /<th scope="col">Difference<\/th>/)
+  assert.match(comparison, /Not provided/)
+  assert.match(comparison, /metric\.values\[option\.id\]/)
+  assert.match(comparison, /difference\?: string \| null/)
+  assert.match(comparison, /data-status=\{option\.status \?\? undefined\}/)
+  assert.match(comparison, /<SourceLine source=\{option\.source\}/)
+  assert.doesNotMatch(comparison, /VERIFIED|UNVERIFIED|PASS|FAIL|BLOCKED/)
+  assert.doesNotMatch(comparison, /children\?:/)
 })
 
 test('semantic fact/source rendering does not create a competing schema or verification badge model', () => {
