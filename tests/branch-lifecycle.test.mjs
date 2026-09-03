@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { branchesToDelete } from '../scripts/branch-lifecycle.mjs'
+import { branchesToDelete, isMissingReferenceResponse } from '../scripts/branch-lifecycle.mjs'
 
 test('branch cleanup keeps only default branch and same-repo open PR heads', () => {
   const deleted = branchesToDelete({
@@ -31,4 +31,11 @@ test('branch cleanup is deterministic regardless of API ordering', () => {
   const second = branchesToDelete({ ...input, branches: [{ name: 'a' }, { name: 'z' }, { name: 'main' }] })
   assert.deepEqual(first, ['a', 'z'])
   assert.deepEqual(second, first)
+})
+
+test('missing branch reference is the only idempotent delete race', () => {
+  assert.equal(isMissingReferenceResponse(422, '{"message":"Reference does not exist"}'), true)
+  assert.equal(isMissingReferenceResponse(422, '{"message":"Validation Failed"}'), false)
+  assert.equal(isMissingReferenceResponse(404, '{"message":"Reference does not exist"}'), false)
+  assert.equal(isMissingReferenceResponse(422, 'not json'), false)
 })
