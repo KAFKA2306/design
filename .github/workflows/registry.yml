@@ -12,10 +12,14 @@ jobs:
   registry:
     runs-on: ubuntu-latest
     env:
-      REGISTRY_REF: ${{ github.event.pull_request.head.sha || github.sha }}
+      EXACT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
       SHADCN_VERSION: 4.19.0
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Assert exact checkout
+        run: test "$(git rev-parse HEAD)" = "$EXACT_SHA"
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: '22.19.0'
@@ -26,17 +30,19 @@ jobs:
       - name: Test local registry contract
         run: pnpm test
       - name: Validate GitHub source registry
-        run: pnpm dlx shadcn@${SHADCN_VERSION} registry validate KAFKA2306/design#${REGISTRY_REF}
+        run: pnpm dlx shadcn@${SHADCN_VERSION} registry validate KAFKA2306/design#${EXACT_SHA}
       - name: List and view pinned registry item
         run: |
-          pnpm dlx shadcn@${SHADCN_VERSION} list KAFKA2306/design#${REGISTRY_REF}
-          pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-base#${REGISTRY_REF}
-      - name: Install clean consumer dependencies
-        run: pnpm --dir fixtures/registry-consumer install --lockfile=false
+          pnpm dlx shadcn@${SHADCN_VERSION} list KAFKA2306/design#${EXACT_SHA}
+          pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-base#${EXACT_SHA}
+      - name: Install initialized clean consumer dependencies
+        run: |
+          test -f fixtures/registry-consumer/components.json
+          pnpm --dir fixtures/registry-consumer install --lockfile=false
       - name: Dry-run kafka-base install
-        run: pnpm dlx shadcn@${SHADCN_VERSION} add KAFKA2306/design/kafka-base#${REGISTRY_REF} --dry-run --cwd fixtures/registry-consumer
+        run: pnpm dlx shadcn@${SHADCN_VERSION} add KAFKA2306/design/kafka-base#${EXACT_SHA} --dry-run --cwd fixtures/registry-consumer
       - name: Install kafka-base
-        run: pnpm dlx shadcn@${SHADCN_VERSION} add KAFKA2306/design/kafka-base#${REGISTRY_REF} --yes --cwd fixtures/registry-consumer
+        run: pnpm dlx shadcn@${SHADCN_VERSION} add KAFKA2306/design/kafka-base#${EXACT_SHA} --yes --cwd fixtures/registry-consumer
       - name: Verify installed authority
         run: |
           test -f fixtures/registry-consumer/src/styles/kafka-tokens.css
