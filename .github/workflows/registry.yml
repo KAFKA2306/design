@@ -29,37 +29,45 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Test local registry contract
         run: pnpm test
-      - name: Validate GitHub source registry
-        run: pnpm dlx shadcn@${SHADCN_VERSION} registry validate KAFKA2306/design#${EXACT_SHA}
-      - name: List and view pinned registry items
+      - name: Validate exact local source registry
+        run: pnpm dlx shadcn@${SHADCN_VERSION} registry validate ./registry.json
+      - name: Build exact local registry
         run: |
-          pnpm dlx shadcn@${SHADCN_VERSION} list KAFKA2306/design#${EXACT_SHA}
-          pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-base#${EXACT_SHA}
-          pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-button#${EXACT_SHA}
-          pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-input#${EXACT_SHA}
-          pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-dialog#${EXACT_SHA}
-          pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-tabs#${EXACT_SHA}
+          rm -rf .registry-build
+          pnpm dlx shadcn@${SHADCN_VERSION} build registry.json --output .registry-build
+          test -f .registry-build/kafka-base.json
+          test -f .registry-build/kafka-button.json
+          test -f .registry-build/kafka-input.json
+          test -f .registry-build/kafka-dialog.json
+          test -f .registry-build/kafka-tabs.json
+      - name: View built registry items
+        run: |
+          pnpm dlx shadcn@${SHADCN_VERSION} view ./.registry-build/kafka-base.json
+          pnpm dlx shadcn@${SHADCN_VERSION} view ./.registry-build/kafka-button.json
+          pnpm dlx shadcn@${SHADCN_VERSION} view ./.registry-build/kafka-input.json
+          pnpm dlx shadcn@${SHADCN_VERSION} view ./.registry-build/kafka-dialog.json
+          pnpm dlx shadcn@${SHADCN_VERSION} view ./.registry-build/kafka-tabs.json
       - name: Install initialized clean consumer dependencies
         run: |
           test -f fixtures/registry-consumer/components.json
           pnpm --dir fixtures/registry-consumer install --lockfile=false
       - name: Install kafka-base
-        run: pnpm dlx shadcn@${SHADCN_VERSION} add KAFKA2306/design/kafka-base#${EXACT_SHA} --yes --cwd fixtures/registry-consumer
+        run: pnpm dlx shadcn@${SHADCN_VERSION} add "$GITHUB_WORKSPACE/.registry-build/kafka-base.json" --yes --cwd fixtures/registry-consumer
       - name: Dry-run Core UI install
         run: |
           pnpm dlx shadcn@${SHADCN_VERSION} add \
-            KAFKA2306/design/kafka-button#${EXACT_SHA} \
-            KAFKA2306/design/kafka-input#${EXACT_SHA} \
-            KAFKA2306/design/kafka-dialog#${EXACT_SHA} \
-            KAFKA2306/design/kafka-tabs#${EXACT_SHA} \
+            "$GITHUB_WORKSPACE/.registry-build/kafka-button.json" \
+            "$GITHUB_WORKSPACE/.registry-build/kafka-input.json" \
+            "$GITHUB_WORKSPACE/.registry-build/kafka-dialog.json" \
+            "$GITHUB_WORKSPACE/.registry-build/kafka-tabs.json" \
             --dry-run --cwd fixtures/registry-consumer
       - name: Install Core UI
         run: |
           pnpm dlx shadcn@${SHADCN_VERSION} add \
-            KAFKA2306/design/kafka-button#${EXACT_SHA} \
-            KAFKA2306/design/kafka-input#${EXACT_SHA} \
-            KAFKA2306/design/kafka-dialog#${EXACT_SHA} \
-            KAFKA2306/design/kafka-tabs#${EXACT_SHA} \
+            "$GITHUB_WORKSPACE/.registry-build/kafka-button.json" \
+            "$GITHUB_WORKSPACE/.registry-build/kafka-input.json" \
+            "$GITHUB_WORKSPACE/.registry-build/kafka-dialog.json" \
+            "$GITHUB_WORKSPACE/.registry-build/kafka-tabs.json" \
             --yes --cwd fixtures/registry-consumer
       - name: Verify installed authority
         run: |
