@@ -36,6 +36,7 @@ Not owned here:
 | Completed decision UI | `registry/ui/product/decision.tsx` | reference consumer + Product UI tests |
 | Product chart grammar | `registry/ui/product/chart.tsx` | Product UI fixture + contract tests |
 | User journey | `registry/ui/product/journey.ts` | Product UI tests + consumer aggregate inputs |
+| Agent workflow | `skills/frontend-design/SKILL.md` | skill contract tests |
 | Semantic/content model | `artifacts/content.schema.json` | `scripts/content-contract.mjs` + synthetic fixture |
 | Consumer adoption config | `schemas/design.config.schema.json` | consumer `design.config.json` |
 | Applied design state | `schemas/design.lock.schema.json` | generated consumer `design.lock.json` |
@@ -95,6 +96,6 @@ For recurring decision surfaces, use the completed Product UI component instead 
 
 ## Documentation rule
 
-Keep durable architecture and authority here. Keep contributor invariants in `AGENTS.md`. Keep current work status and acceptance criteria in GitHub Issues and pull requests.
+Keep durable architecture and authority here. Keep contributor invariants in `AGENTS.md`. Keep the agent execution workflow in `skills/frontend-design/SKILL.md`. Keep current work status and acceptance criteria in GitHub Issues and pull requests.
 
 Do not copy dependency versions, registry inventories, or issue progress into prose documentation; link to the executable or structured authority instead.
