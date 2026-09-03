@@ -12,6 +12,7 @@ import {
   DecisionPanel,
   EvidenceSurface,
   FilterToolbar,
+  StatusSurface,
   type BarPoint,
   type DataTableColumn,
   type ScatterPoint,
@@ -153,6 +154,7 @@ function App() {
   const [query, setQuery] = useState('')
   const [navOpen, setNavOpen] = useState(false)
   const [decisionReviewed, setDecisionReviewed] = useState(false)
+  const [statusReviewed, setStatusReviewed] = useState(false)
   const filteredRows = useMemo(() => rows.filter((row) => row.asset.toLowerCase().includes(query.toLowerCase())), [query])
 
   return (
@@ -196,6 +198,27 @@ function App() {
             { label: 'Target', detail: 'Reduce risk by 2.2pt without materially reducing expected return.' },
             { label: 'Constraint', detail: 'Cash floor 5%; current 6.8%.' },
             { label: 'Watch', detail: 'US Tech contributes 38.4% of modeled portfolio risk.' },
+          ]}
+        />
+
+        <StatusSurface
+          id="status"
+          eyebrow="OPERATING STATUS"
+          title="Portfolio checks"
+          items={[
+            {
+              id: 'risk-budget',
+              label: 'Risk budget',
+              status: statusReviewed ? 'Reviewed' : 'Within configured limit',
+              reason: 'Forecast risk is below the configured budget in this synthetic fixture.',
+              tone: 'ready',
+              action: {
+                label: statusReviewed ? 'Reviewed' : 'Review status',
+                onClick: () => setStatusReviewed(true),
+                disabled: statusReviewed,
+              },
+              source,
+            },
           ]}
         />
 
