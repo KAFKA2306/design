@@ -6,19 +6,19 @@ const readme = fs.readFileSync('README.md', 'utf8')
 const agents = fs.readFileSync('AGENTS.md', 'utf8')
 const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
 
-const canonicalPaths = [
-  'tokens/foundation.tokens.json',
-  'styles/tokens.css',
-  'styles/components.css',
-  'registry.json',
-  'registry/ui',
-  'registry/ui/product-ui.tsx',
-  'registry/ui/product',
-  'registry/ui/product/chart.tsx',
-  'artifacts/content.schema.json',
-  'scripts/content-contract.mjs',
-  'fixtures/registry-consumer',
-  '.github/workflows',
+const canonicalReferences = [
+  ['tokens/foundation.tokens.json', 'tokens/foundation.tokens.json'],
+  ['styles/tokens.css', 'styles/tokens.css'],
+  ['styles/components.css', 'styles/components.css'],
+  ['registry.json', 'registry.json'],
+  ['registry/ui/', 'registry/ui'],
+  ['registry/ui/product-ui.tsx', 'registry/ui/product-ui.tsx'],
+  ['registry/ui/product/', 'registry/ui/product'],
+  ['registry/ui/product/chart.tsx', 'registry/ui/product/chart.tsx'],
+  ['artifacts/content.schema.json', 'artifacts/content.schema.json'],
+  ['scripts/content-contract.mjs', 'scripts/content-contract.mjs'],
+  ['fixtures/registry-consumer/', 'fixtures/registry-consumer'],
+  ['.github/workflows/', '.github/workflows'],
 ]
 
 const documentedScripts = [
@@ -32,9 +32,9 @@ const documentedScripts = [
   'build',
 ]
 
-test('README canonical paths resolve in the repository', () => {
-  for (const path of canonicalPaths) {
-    assert.ok(readme.includes(`\`${path}\``), `${path} must remain documented`)
+test('README canonical references resolve in the repository', () => {
+  for (const [documented, path] of canonicalReferences) {
+    assert.ok(readme.includes(`\`${documented}\``), `${documented} must remain documented`)
     assert.ok(fs.existsSync(path), `${path} must exist`)
   }
 })
