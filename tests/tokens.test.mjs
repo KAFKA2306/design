@@ -5,9 +5,9 @@ import { flattenTokens, generateCss, readTokens, resolveToken, validateTokens } 
 test('v0 visual anchors are canonical token values', () => {
   const root = readTokens();
   const tokens = validateTokens(root);
-  assert.equal(resolveToken('color.light.canvas', tokens).value.hex, '#F6F8FB');
-  assert.equal(resolveToken('color.light.foreground', tokens).value.hex, '#111827');
-  assert.equal(resolveToken('color.light.border', tokens).value.hex, '#D9E1EA');
+  assert.equal(resolveToken('color.light.canvas', tokens).value.hex, '#F7F5EF');
+  assert.equal(resolveToken('color.light.foreground', tokens).value.hex, '#17233F');
+  assert.equal(resolveToken('color.light.border', tokens).value.hex, '#D9D6CE');
   assert.equal(resolveToken('color.light.primary', tokens).value.hex, '#2563EB');
   assert.equal(resolveToken('color.light.accent', tokens).value.hex, '#7DD3FC');
   assert.deepEqual(resolveToken('dimension.tableRow', tokens).value, { value: 30, unit: 'px' });

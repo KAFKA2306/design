@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "kafka2306-design",
+  "homepage": "https://github.com/KAFKA2306/design",
+  "items": [
+    {
+      "name": "kafka-base",
+      "type": "registry:base",
+      "title": "KAFKA2306 Base",
+      "description": "Canonical KAFKA2306 frontend base: Base UI primitives, Lucide icons, and generated foundation styles.",
+      "extends": "none",
+      "config": {
+        "style": "base-nova",
+        "iconLibrary": "lucide",
+        "rsc": false,
+        "tsx": true,
+        "tailwind": { "baseColor": "neutral", "css": "src/index.css" },
+        "aliases": {
+          "components": "@/components",
+          "utils": "@/lib/utils",
+          "ui": "@/components/ui",
+          "lib": "@/lib",
+          "hooks": "@/hooks"
+        }
+      },
+      "dependencies": ["lucide-react@1.39.0"],
+      "files": [
+        { "path": "styles/tokens.css", "type": "registry:file", "target": "~/src/styles/kafka-tokens.css" },
+        { "path": "styles/globals.css", "type": "registry:file", "target": "~/src/styles/kafka-globals.css" }
+      ],
+      "cssVars": {
+        "light": {
+          "background": "var(--k-color-canvas)", "foreground": "var(--k-color-foreground)", "card": "var(--k-color-surface)", "card-foreground": "var(--k-color-foreground)", "popover": "var(--k-color-surface)", "popover-foreground": "var(--k-color-foreground)", "primary": "var(--k-color-primary)", "primary-foreground": "var(--k-color-canvas)", "secondary": "var(--k-color-surface)", "secondary-foreground": "var(--k-color-foreground)", "muted": "var(--k-color-surface)", "muted-foreground": "var(--k-color-muted-foreground)", "accent": "var(--k-color-accent)", "accent-foreground": "var(--k-color-foreground)", "destructive": "var(--k-color-danger)", "border": "var(--k-color-border)", "input": "var(--k-color-border)", "ring": "var(--k-color-focus)", "chart-1": "var(--k-color-primary)", "chart-2": "var(--k-color-accent)", "chart-3": "var(--k-color-success)", "chart-4": "var(--k-color-warning)", "chart-5": "var(--k-color-danger)", "sidebar": "var(--k-color-surface)", "sidebar-foreground": "var(--k-color-foreground)", "sidebar-primary": "var(--k-color-primary)", "sidebar-primary-foreground": "var(--k-color-canvas)", "sidebar-accent": "var(--k-color-accent)", "sidebar-accent-foreground": "var(--k-color-foreground)", "sidebar-border": "var(--k-color-border)", "sidebar-ring": "var(--k-color-focus)"
+        },
+        "dark": {
+          "background": "var(--k-color-canvas)", "foreground": "var(--k-color-foreground)", "card": "var(--k-color-surface)", "card-foreground": "var(--k-color-foreground)", "popover": "var(--k-color-surface)", "popover-foreground": "var(--k-color-foreground)", "primary": "var(--k-color-primary)", "primary-foreground": "var(--k-color-canvas)", "secondary": "var(--k-color-surface)", "secondary-foreground": "var(--k-color-foreground)", "muted": "var(--k-color-surface)", "muted-foreground": "var(--k-color-muted-foreground)", "accent": "var(--k-color-accent)", "accent-foreground": "var(--k-color-foreground)", "destructive": "var(--k-color-danger)", "border": "var(--k-color-border)", "input": "var(--k-color-border)", "ring": "var(--k-color-focus)", "chart-1": "var(--k-color-primary)", "chart-2": "var(--k-color-accent)", "chart-3": "var(--k-color-success)", "chart-4": "var(--k-color-warning)", "chart-5": "var(--k-color-danger)", "sidebar": "var(--k-color-surface)", "sidebar-foreground": "var(--k-color-foreground)", "sidebar-primary": "var(--k-color-primary)", "sidebar-primary-foreground": "var(--k-color-canvas)", "sidebar-accent": "var(--k-color-accent)", "sidebar-accent-foreground": "var(--k-color-foreground)", "sidebar-border": "var(--k-color-border)", "sidebar-ring": "var(--k-color-focus)"
+        }
+      },
+      "css": {
+        "@import \"./styles/kafka-tokens.css\"": {},
+        "@import \"./styles/kafka-globals.css\"": {}
+      }
+    }
+  ]
+}

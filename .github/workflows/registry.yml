@@ -1,0 +1,50 @@
+name: registry
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  registry:
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY_REF: ${{ github.event.pull_request.head.sha || github.sha }}
+      SHADCN_VERSION: 4.19.0
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22.19.0'
+      - name: Enable pnpm
+        run: corepack enable && corepack prepare pnpm@11.25.0 --activate
+      - name: Install design repo
+        run: pnpm install --frozen-lockfile
+      - name: Test local registry contract
+        run: pnpm test
+      - name: Validate GitHub source registry
+        run: pnpm dlx shadcn@${SHADCN_VERSION} registry validate KAFKA2306/design#${REGISTRY_REF}
+      - name: List and view pinned registry item
+        run: |
+          pnpm dlx shadcn@${SHADCN_VERSION} list KAFKA2306/design#${REGISTRY_REF}
+          pnpm dlx shadcn@${SHADCN_VERSION} view KAFKA2306/design/kafka-base#${REGISTRY_REF}
+      - name: Install clean consumer dependencies
+        run: pnpm --dir fixtures/registry-consumer install --lockfile=false
+      - name: Dry-run kafka-base install
+        run: pnpm dlx shadcn@${SHADCN_VERSION} add KAFKA2306/design/kafka-base#${REGISTRY_REF} --dry-run --cwd fixtures/registry-consumer
+      - name: Install kafka-base
+        run: pnpm dlx shadcn@${SHADCN_VERSION} add KAFKA2306/design/kafka-base#${REGISTRY_REF} --yes --cwd fixtures/registry-consumer
+      - name: Verify installed authority
+        run: |
+          test -f fixtures/registry-consumer/src/styles/kafka-tokens.css
+          test -f fixtures/registry-consumer/src/styles/kafka-globals.css
+          grep -F '@import "./styles/kafka-tokens.css"' fixtures/registry-consumer/src/index.css
+          grep -F '@import "./styles/kafka-globals.css"' fixtures/registry-consumer/src/index.css
+          grep -F '"style": "base-nova"' fixtures/registry-consumer/components.json
+          grep -F '"iconLibrary": "lucide"' fixtures/registry-consumer/components.json
+          test ! -e fixtures/registry-consumer/tokens/foundation.tokens.json
+      - name: Build installed consumer
+        run: pnpm --dir fixtures/registry-consumer build
