@@ -17,7 +17,7 @@ test('Pages deploys verified /design/ build', () => {
 
 test('public specimen renders canonical Product UI instead of a Pages-only mock', () => {
   const source = fs.readFileSync(path.join(root, 'src', 'main.tsx'), 'utf8');
-  assert.match(source, /from '\.\.\/registry\/ui\/product-ui'/);
+  assert.match(source, /from '\.\.\/registry\/ui\/product\/decision'/);
   assert.match(source, /<DecisionPanel/);
   assert.match(source, /View source on GitHub/);
 });
