@@ -1,11 +1,15 @@
-import { readFile } from 'node:fs/promises';
+import { readFile, readFileSync } from 'node:fs';
+import { readFile as readFileAsync } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const states = new Set(['usable', 'loading', 'empty', 'error', 'unavailable', 'unverified', 'all']);
-export const severities = new Set(['error', 'warning', 'info']);
-const required = ['criterion', 'observed', 'expected', 'affected_surface', 'affected_state', 'severity', 'verification_method', 'evidence'];
-const allowed = new Set([...required, 'repair_hint']);
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const schema = JSON.parse(readFileSync(path.join(root, 'schemas/violation.schema.json'), 'utf8'));
+const properties = schema.properties;
+const required = schema.required;
+const allowed = new Set(Object.keys(properties));
+export const states = new Set(properties.affected_state.enum);
+export const severities = new Set(properties.severity.enum);
 
 const expectedByCriterion = Object.freeze({
   'managed-file-drift': 'managed files, lock state, and canonical integration match the pinned design SHA',
@@ -43,9 +47,7 @@ export function structuredViolationFromConformanceError(error) {
   const affectedSurface = typeof error.path === 'string' ? error.path.trim() : '';
   const observed = typeof error.message === 'string' ? error.message.trim() : '';
   const expected = expectedByCriterion[criterion];
-  if (!criterion || !affectedSurface || !observed || !expected) {
-    throw new Error(`cannot structure conformance error: ${JSON.stringify(error)}`);
-  }
+  if (!criterion || !affectedSurface || !observed || !expected) throw new Error(`cannot structure conformance error: ${JSON.stringify(error)}`);
   return {
     criterion,
     observed,
@@ -70,7 +72,7 @@ const isCli = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath
 if (isCli) {
   try {
     if (!process.argv[2] || process.argv.length !== 3) throw new Error('Usage: pnpm violations:validate -- <json-file>');
-    const input = JSON.parse(await readFile(process.argv[2], 'utf8'));
+    const input = JSON.parse(await readFileAsync(process.argv[2], 'utf8'));
     const errors = validateViolationBundle(input);
     if (errors.length) {
       console.error(JSON.stringify({ status: 'INVALID', errors }, null, 2));
