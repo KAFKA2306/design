@@ -31,7 +31,9 @@ function makeConsumer() {
   fs.mkdirSync(path.join(consumer, 'src'), { recursive: true });
   fs.writeFileSync(path.join(consumer, 'src', 'styles.css'), 'body { margin: 0; }\n');
   fs.writeFileSync(path.join(consumer, 'design.config.json'), JSON.stringify({
+    schemaVersion: 1,
     designSha: spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).stdout.trim(),
+    preset: 'base',
     cssEntry: 'src/styles.css',
   }, null, 2));
   return consumer;
