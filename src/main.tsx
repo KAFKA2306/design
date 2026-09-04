@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { DecisionPanel } from '../registry/ui/product-ui';
+import { DecisionPanel } from '../registry/ui/product/decision';
 import '../styles/tokens.css';
 import '../styles/globals.css';
 import '../styles/components.css';
