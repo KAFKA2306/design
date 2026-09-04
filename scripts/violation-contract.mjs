@@ -1,4 +1,4 @@
-import { readFile, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { readFile as readFileAsync } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
