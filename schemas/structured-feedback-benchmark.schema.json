@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kafka2306:design:structured-feedback-benchmark:v1",
+  "title": "Structured feedback benchmark protocol",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "productionTruth", "protocol", "tasks"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "status": {"const": "synthetic-pilot"},
+    "productionTruth": {"const": false},
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["conditions", "maxRepairIterations", "primaryMetrics"],
+      "properties": {
+        "conditions": {"const": ["generate-only", "pass-fail", "structured-one-shot", "structured-loop"]},
+        "maxRepairIterations": {"const": 4},
+        "primaryMetrics": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 5,
+          "items": {"enum": ["repair_success", "remaining_violations", "false_acceptance", "overcorrection", "iterations_to_verified"]},
+          "allOf": [
+            {"contains": {"const": "repair_success"}},
+            {"contains": {"const": "remaining_violations"}},
+            {"contains": {"const": "false_acceptance"}},
+            {"contains": {"const": "overcorrection"}},
+            {"contains": {"const": "iterations_to_verified"}}
+          ]
+        }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "category", "surface", "defect", "groundTruth"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "category": {"enum": ["contract", "state", "accessibility", "journey"]},
+          "surface": {"type": "string", "minLength": 1},
+          "defect": {"type": "string", "minLength": 1},
+          "groundTruth": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["criterion", "affected_state", "severity", "verification_method"],
+            "properties": {
+              "criterion": {"type": "string", "minLength": 1},
+              "affected_state": {"enum": ["usable", "loading", "empty", "error", "unavailable", "unverified", "all"]},
+              "severity": {"enum": ["error", "warning", "info"]},
+              "verification_method": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  }
+}
