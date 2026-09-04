@@ -7,5 +7,5 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 test('showcase retains interactive theme specimen', () => {
   const source = fs.readFileSync(path.join(root, 'src', 'main.tsx'), 'utf8');
   assert.match(source, /theme-toggle/);
-  assert.match(source, /data-theme/);
+  assert.match(source, /document\.documentElement\.(?:dataset\.theme|setAttribute\(['"]data-theme['"])/);
 });
