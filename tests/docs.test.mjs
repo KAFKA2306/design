@@ -8,7 +8,7 @@ const agents = read('AGENTS.md')
 const packageJson = JSON.parse(read('package.json'))
 const journey = read('registry/ui/product/journey.ts')
 const productUi = read('registry/ui/product-ui.tsx')
-const showcase = read('src/App.tsx')
+const showcase = read('src/main.tsx')
 
 const markdownReferences = [...readme.matchAll(/`([^`]+\.(?:json|css|tsx|ts|mjs|md))`/g)].map((match) => match[1])
 
@@ -48,8 +48,9 @@ test('journey policy is executable rather than phrase-pinned prose', () => {
   assert.match(agents, /Raw telemetry remains consumer-owned/)
 })
 
-test('canonical reference surface consumes completed decision UI before supporting views and reference detail', () => {
-  assert.match(productUi, /DecisionPanel/)
-  assert.match(showcase, /<ProductUI\.DecisionPanel/)
-  assert.ok(showcase.indexOf('<ProductUI.DecisionPanel') < showcase.indexOf('System layers'))
+test('canonical showcase consumes Product UI through its stable public entrypoint', () => {
+  assert.match(productUi, /export \{ DecisionPanel \} from '\.\/product\/decision'/)
+  assert.match(showcase, /import \{ DecisionPanel \} from '\.\.\/registry\/ui\/product-ui'/)
+  assert.match(showcase, /<DecisionPanel/)
+  assert.ok(showcase.indexOf('<DecisionPanel') < showcase.indexOf('One system, reusable layers'))
 })
