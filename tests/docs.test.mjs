@@ -48,9 +48,9 @@ test('journey policy is executable rather than phrase-pinned prose', () => {
   assert.match(agents, /Raw telemetry remains consumer-owned/)
 })
 
-test('canonical showcase consumes Product UI through its stable public entrypoint', () => {
+test('canonical showcase consumes the canonical DecisionPanel source before supporting detail', () => {
   assert.match(productUi, /export \{ DecisionPanel \} from '\.\/product\/decision'/)
-  assert.match(showcase, /import \{ DecisionPanel \} from '\.\.\/registry\/ui\/product-ui'/)
+  assert.match(showcase, /import \{ DecisionPanel \} from '\.\.\/registry\/ui\/product\/decision'/)
   assert.match(showcase, /<DecisionPanel/)
   assert.ok(showcase.indexOf('<DecisionPanel') < showcase.indexOf('One system, reusable layers'))
 })
