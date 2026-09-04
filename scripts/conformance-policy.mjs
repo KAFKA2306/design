@@ -7,6 +7,15 @@ const SKIP_DIRS = new Set(['.git', '.docusaurus', 'node_modules', 'dist', 'build
 const SOURCE_EXTENSIONS = new Set(['.css', '.scss', '.sass', '.less', '.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs', '.yml', '.yaml'])
 const CORE_COMPONENTS = new Set(['button.tsx', 'input.tsx', 'dialog.tsx', 'tabs.tsx', 'product-ui.tsx'])
 
+export const CONFORMANCE_EXPECTATIONS = Object.freeze({
+  'managed-file-drift': 'managed files, lock state, and canonical integration match the pinned design SHA',
+  'duplicate-visual-authority': 'visual values use canonical design tokens instead of consumer-owned alternatives',
+  'forbidden-visual-effect': 'the consumer uses canonical design styles without prohibited local visual effects',
+  'chart-override': 'chart styling and Recharts usage stay inside the canonical Product UI chart adapter',
+  'mutable-design-ref': 'design workflow and action references use a full immutable Git SHA',
+  'design-owned-component-duplication': 'each design-owned component has one canonical source location',
+})
+
 function toPosix(relativePath) {
   return relativePath.split(path.sep).join('/')
 }
