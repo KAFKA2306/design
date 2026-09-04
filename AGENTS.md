@@ -1,51 +1,63 @@
-# Repository operating rules
+# Repository operating contract
 
-`README.md` explains the repository. This file contains only durable change-time invariants.
+`README.md` explains the product. `AGENTS.md` contains only durable rules for changing it. Prefer executable contracts over prose.
 
 ## Authority
 
-- `main` is the only long-lived authority.
-- Current explicit user direction overrides stale issue prose or old branches.
-- `tokens/foundation.tokens.json` is the only hand-edited visual-token authority. Regenerate derived styles; never hand-edit generated token output.
-- `artifacts/content.schema.json` is the only cross-format semantic/content authority. UI may render its fields but must not create a competing verification or provenance model.
-- Registry component source lives once under `registry/ui/`; consumer copies are generated or installed artifacts.
-- `registry/ui/product-ui.tsx` is the stable Product UI public entrypoint. Keep implementation responsibility-split under `registry/ui/product/`.
-- Product charts are centrally configured in `registry/ui/product/chart.tsx`. Consumers must not redefine palette, grid, geometry, actual/forecast styling, tooltip, or chart spacing.
-- User-journey action vocabulary, candidate patterns, and recommendation logic live in `registry/ui/product/journey.ts`. Do not create domain-specific competing journey authorities.
+1. Current explicit user direction.
+2. This `AGENTS.md`.
+3. Current executable code, config, tests, CI, and runtime evidence.
+4. `README.md` and other durable docs.
+5. Issues, PR prose, historical branches, and inference.
 
-## User journey
+`main` is the only long-lived branch authority. Never promote stale prose, generated output, fixtures, or old branches above current executable evidence.
 
-- Compose primary product surfaces from canonical user actions: inspect, compare, decide, act, and investigate.
-- Do not force one global reading order across every product. Use the canonical journey patterns as candidates and choose the pattern that fits the page purpose.
-- Recommend candidates from explicit structural evidence and aggregate usage signals. Existing UI structure, data, available actions, transitions, declared priorities, consumer-provided priorities, and observed aggregate usage may contribute.
-- Raw usage events remain consumer-owned. This repository defines the aggregate input semantics but does not collect or store consumer telemetry.
-- Prefer meaningful completed components whose visual hierarchy, information order, interaction, responsive behavior, accessibility, and state representation are owned here. Consumers should provide data and business actions rather than reconstruct the same purpose component.
-- Changelog, Recent Updates, implementation notes, debug information, roadmap, and long explanatory text do not belong in the primary task path. Move them below the primary task or into explicit disclosure when they remain useful.
-- PLANNED or unavailable features must not visually compete with usable actions. Do not fill the first screen with unavailable navigation or specimen content.
-- Apply the same brand grammar and interaction quality across products without forcing the same dashboard shape.
-- Prefer changing order, visual hierarchy, and interaction over adding prose that explains a confusing interface.
+Canonical sources:
+- Visual tokens: `tokens/foundation.tokens.json`.
+- Cross-format semantics/provenance: `artifacts/content.schema.json`.
+- Registry component source: `registry/ui/`.
+- Product UI public entrypoint: `registry/ui/product-ui.tsx`; implementation stays split under `registry/ui/product/`.
+- Product chart grammar: `registry/ui/product/chart.tsx`.
+- User-journey vocabulary/patterns/recommendation logic: `registry/ui/product/journey.ts`.
 
-## Evaluation loop
+Do not create competing authorities. Generated/installed consumer copies are not sources.
 
-- Generation is replaceable; evaluation is durable. Repository value must accumulate in constraints, contracts, tests, reference data, and feedback loops rather than one-off generated screens.
-- Every reusable product surface must make its important states testable: usable, loading, empty, error, unavailable, and unverified where applicable.
-- Prefer machine-checkable acceptance criteria over prose. If a rule can be expressed as a schema, type, test, conformance check, or generated artifact check, encode it there instead of creating another document.
-- A successful build is not evidence of a successful user journey. Evaluate whether the user can inspect, compare, decide, act, and investigate without relying on explanatory prose.
-- Consumer adoption is part of validation. A design change is not complete merely because the specimen looks correct; downstream integration must preserve the canonical contract and journey semantics.
-- Synthetic fixtures are test-only evidence. They must never be presented as production truth or used to conceal missing consumer data.
-- Missing canonical input, provenance, or required state must fail visibly. Do not convert unknown or unverified data into plausible-looking values.
+## Product contract
+
+Optimize the user's path through **inspect → compare → decide → act → investigate**. Choose the journey pattern that fits the page; do not force one dashboard shape or reading order everywhere.
+
+Prefer completed reusable components that own hierarchy, information order, interaction, responsive behavior, accessibility, and states. Consumers provide data and business actions rather than rebuilding the same component.
+
+Keep changelogs, implementation/debug notes, roadmap text, and unavailable features out of the primary task path. Prefer fixing order, hierarchy, interaction, and state representation over adding prose that explains a confusing UI.
+
+Raw telemetry remains consumer-owned. This repository may define aggregate usage semantics but must not collect or store consumer telemetry.
+
+## Verification contract
+
+Generation is replaceable; verified constraints are durable. Important surfaces must expose machine-testable usable, loading, empty, error, unavailable, and—where relevant—unverified states.
+
+A build passing is not proof that the journey works. Verify the actual inspect/compare/decide/act/investigate path and downstream adoption.
+
+When a rule can be a type, schema, test, conformance check, generated-artifact check, or deterministic verifier, implement it there instead of expanding documentation.
+
+Synthetic fixtures are test-only. Missing canonical input, provenance, or required state must fail visibly; never manufacture plausible production truth or silently fall back.
 
 ## Change discipline
 
-- Prefer DELETE > MERGE > REPLACE > ADD. Remove or consolidate stale authority before adding a new layer.
-- Do not create a second documentation authority. Use `README.md` for durable repository orientation, this file for invariants, and GitHub Issues/PRs for current status and acceptance criteria.
-- Do not duplicate dependency versions, registry inventories, generated values, or issue progress in prose documentation when a structured or executable source already exists.
-- When architecture changes, update the existing canonical document instead of adding another Markdown file unless it serves a distinct durable contract or audience.
-- Fail loudly rather than silently falling back when canonical input is missing or malformed.
-- Do not commit employer, customer, internal-project, or other confidential names, values, sources, masters, images, screenshots, summaries, or derived information. Repository fixtures must be synthetic/test-only.
+Use **DELETE > MERGE > REPLACE > ADD**. Before adding a file, abstraction, dependency, document, or rule, try to remove or consolidate an existing one.
 
-## Branch lifecycle
+Keep only distinct authorities:
+- `README.md`: human orientation and current product surface.
+- `AGENTS.md`: repository-wide change invariants.
+- executable/schema/test/config sources: machine-enforced truth.
+- Issues/PRs: temporary work state and acceptance criteria.
 
-- One active work item uses at most one branch.
-- Start from the latest `main`; do not use stale branches as authority.
-- Merge/closed PR branches are disposable and must not become long-lived documentation or implementation references.
+Do not duplicate versions, inventories, generated values, issue progress, or executable rules in prose. Update an existing authority instead of adding another Markdown document unless it serves a genuinely distinct durable audience or contract.
+
+Do not commit employer, customer, internal-project, or other confidential names, values, sources, masters, images, screenshots, summaries, or derived information. Public fixtures must be synthetic/test-only.
+
+## Completion
+
+For a change to be complete, inspect the relevant implementation first, make the smallest coherent change, run the strongest available deterministic checks, and verify the resulting user-facing/runtime behavior when applicable. Do not report inferred or synthetic evidence as observed production behavior.
+
+One active work item uses at most one branch. Start from current `main`; merged/closed PR branches are disposable and must not become authorities.
