@@ -34,8 +34,10 @@ test('branch cleanup is deterministic regardless of API ordering', () => {
 })
 
 test('missing branch reference is the only idempotent delete race', () => {
-  assert.equal(isMissingReferenceResponse(422, '{"message":"Reference does not exist"}'), true)
-  assert.equal(isMissingReferenceResponse(422, '{"message":"Validation Failed"}'), false)
-  assert.equal(isMissingReferenceResponse(404, '{"message":"Reference does not exist"}'), false)
-  assert.equal(isMissingReferenceResponse(422, 'not json'), false)
+  for (const status of [404, 422]) {
+    assert.equal(isMissingReferenceResponse(status, '{"message":"Reference does not exist"}'), true)
+    assert.equal(isMissingReferenceResponse(status, '{"message":"Validation Failed"}'), false)
+  }
+  assert.equal(isMissingReferenceResponse(403, '{"message":"Reference does not exist"}'), false)
+  assert.equal(isMissingReferenceResponse(404, 'not json'), false)
 })
