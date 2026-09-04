@@ -10,11 +10,12 @@ const journey = read('registry/ui/product/journey.ts')
 const productUi = read('registry/ui/product-ui.tsx')
 const showcase = read('src/main.tsx')
 
-const markdownReferences = [...readme.matchAll(/`([^`]+\.(?:json|css|tsx|ts|mjs|md))`/g)].map((match) => match[1])
+const canonicalAuthorityPaths = [...readme.matchAll(/^\| [^|]+ \| `([^`]+)` \|/gm)].map((match) => match[1])
 
-test('README canonical references resolve in the repository', () => {
-  for (const reference of markdownReferences) {
-    assert.equal(fs.existsSync(reference), true, `README reference does not resolve: ${reference}`)
+test('README canonical authority paths resolve in the repository', () => {
+  assert.ok(canonicalAuthorityPaths.length > 0, 'README authority map must expose canonical paths')
+  for (const reference of canonicalAuthorityPaths) {
+    assert.equal(fs.existsSync(reference), true, `README canonical authority does not resolve: ${reference}`)
   }
 })
 
