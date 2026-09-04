@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://kafka2306.github.io/design/schemas/violation.schema.json",
+  "$id": "urn:kafka2306:design:violation:v1",
   "title": "Design structured violation",
   "type": "object",
   "additionalProperties": false,
