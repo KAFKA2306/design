@@ -1,7 +1,7 @@
 import { useId } from 'react'
 import type { DecisionPanelAction, DecisionPanelState } from './decision'
 import { SourceLine } from './information'
-import type { SemanticRecord } from './semantic'
+import type { SemanticRecord, SurfaceState } from './semantic'
 
 export type StatusSurfaceTone = DecisionPanelState
 
@@ -15,26 +15,55 @@ export type StatusSurfaceItem = Readonly<{
   source?: SemanticRecord | null
 }>
 
-export type StatusSurfaceProps = Readonly<{
+type StatusSurfaceBaseProps = Readonly<{
   id?: string
   eyebrow?: string
   title: string
-  items: readonly StatusSurfaceItem[]
-  emptyMessage?: string
 }>
+
+export type StatusSurfaceProps = StatusSurfaceBaseProps & (
+  | Readonly<{
+      state: 'usable'
+      items: readonly StatusSurfaceItem[]
+      stateMessage?: never
+    }>
+  | Readonly<{
+      state: Exclude<SurfaceState, 'usable'>
+      items?: readonly []
+      stateMessage: string
+    }>
+)
 
 export function StatusSurface({
   id,
   eyebrow,
   title,
-  items,
-  emptyMessage = 'No status provided.',
+  state,
+  items = [],
+  stateMessage,
 }: StatusSurfaceProps) {
   const generatedId = useId()
   const headingId = id ? `${id}-heading` : generatedId
 
+  if (state === 'usable' && items.length === 0) {
+    throw new Error('StatusSurface state="usable" requires at least one item; use state="empty" for an empty result.')
+  }
+  if (state !== 'usable' && items.length > 0) {
+    throw new Error(`StatusSurface state="${state}" cannot render status items; use state="usable" for usable data.`)
+  }
+
+  const stateRole = state === 'error' ? 'alert' : 'status'
+  const liveMode = state === 'error' ? 'assertive' : 'polite'
+
   return (
-    <section id={id} className="k-dashboard-section" data-component="status-surface" aria-labelledby={headingId}>
+    <section
+      id={id}
+      className="k-dashboard-section"
+      data-component="status-surface"
+      data-surface-state={state}
+      aria-busy={state === 'loading' || undefined}
+      aria-labelledby={headingId}
+    >
       <header className="k-dashboard-section-header">
         <div>
           {eyebrow ? <p className="k-dashboard-eyebrow">{eyebrow}</p> : null}
@@ -42,8 +71,10 @@ export function StatusSurface({
         </div>
       </header>
 
-      {items.length === 0 ? (
-        <p className="k-table-state" role="status">{emptyMessage}</p>
+      {state !== 'usable' ? (
+        <p className="k-table-state" role={stateRole} aria-live={liveMode} data-state-message={state}>
+          {stateMessage}
+        </p>
       ) : (
         items.map((item) => {
           const tone = item.tone ?? 'neutral'

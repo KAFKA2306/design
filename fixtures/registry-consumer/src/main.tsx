@@ -205,6 +205,7 @@ function App() {
           id="status"
           eyebrow="OPERATING STATUS"
           title="Portfolio checks"
+          state="usable"
           items={[
             {
               id: 'risk-budget',

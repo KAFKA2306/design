@@ -37,6 +37,9 @@ export type {
   StatusSurfaceTone,
 } from './product/status'
 
+export { SURFACE_STATES } from './product/semantic'
+export type { SurfaceState } from './product/semantic'
+
 export {
   DEFAULT_JOURNEY_RECOMMENDATION_LIMIT,
   JOURNEY_ACTIONS,
