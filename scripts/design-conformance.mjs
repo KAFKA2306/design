@@ -18,6 +18,7 @@ import {
   validateLock,
 } from './adoption-contract.mjs'
 import { scanConformancePolicy } from './conformance-policy.mjs'
+import { structuredViolationBundleFromConformanceErrors } from './violation-contract.mjs'
 
 function push(errors, rule, filePath, message) {
   errors.push({ rule, path: toPosix(filePath), message })
@@ -71,25 +72,38 @@ export function checkConsumer(consumerPath) {
   return [...errors, ...scanConformancePolicy(consumerRoot, config)]
 }
 
-function parseConsumerArg(argv) {
-  const index = argv.indexOf('--consumer')
-  if (index === -1 || !argv[index + 1] || argv[index + 1].startsWith('--')) {
-    throw new Error(`Usage: pnpm conformance --consumer <path containing ${CONFIG_NAME}>`)
+function parseArgs(argv) {
+  const args = [...argv]
+  let format = 'text'
+  const formatIndex = args.indexOf('--format')
+  if (formatIndex !== -1) {
+    const value = args[formatIndex + 1]
+    if (!['text', 'json'].includes(value)) throw new Error('Usage: pnpm conformance --consumer <path> [--format json]')
+    args.splice(formatIndex, 2)
+    format = value
   }
-  if (argv.length !== index + 2) throw new Error('Unexpected conformance arguments')
-  return argv[index + 1]
+  const index = args.indexOf('--consumer')
+  if (index === -1 || !args[index + 1] || args[index + 1].startsWith('--')) {
+    throw new Error(`Usage: pnpm conformance --consumer <path containing ${CONFIG_NAME}> [--format json]`)
+  }
+  if (args.length !== index + 2) throw new Error('Unexpected conformance arguments')
+  return { consumerPath: args[index + 1], format }
 }
 
 const isCli = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 if (isCli) {
   try {
-    const errors = checkConsumer(parseConsumerArg(process.argv.slice(2)))
-    if (errors.length === 0) {
+    const { consumerPath, format } = parseArgs(process.argv.slice(2))
+    const errors = checkConsumer(consumerPath)
+    if (format === 'json') {
+      const bundle = structuredViolationBundleFromConformanceErrors(errors)
+      console.log(JSON.stringify({ status: errors.length === 0 ? 'VERIFIED' : 'INVALID', ...bundle }, null, 2))
+    } else if (errors.length === 0) {
       console.log('design conformance: ok')
     } else {
       for (const error of errors) console.error(`[${error.rule}] ${error.path}: ${error.message}`)
-      process.exitCode = 1
     }
+    if (errors.length !== 0) process.exitCode = 1
   } catch (error) {
     console.error(`design conformance failed: ${error.message}`)
     process.exitCode = 1
