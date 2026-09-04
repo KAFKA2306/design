@@ -28,6 +28,16 @@ for (const file of files) {
   if (/#[0-9a-fA-F]{3,8}\b/.test(text)) violations.push(`${file}: raw color literal outside generated tokens`);
 }
 
+for (const entry of fs.readdirSync('.github/workflows', { withFileTypes: true })) {
+  if (!entry.isFile() || !/\.ya?ml$/.test(entry.name)) continue;
+  const file = path.join('.github/workflows', entry.name);
+  const text = fs.readFileSync(file, 'utf8');
+  for (const match of text.matchAll(/^\s*-?\s*uses:\s*([^\s#]+).*$/gm)) {
+    const reference = match[1];
+    if (!/@[0-9a-f]{40}$/.test(reference)) violations.push(`${file}: action reference must use a full immutable SHA (${reference})`);
+  }
+}
+
 const globals = fs.readFileSync('styles/globals.css', 'utf8');
 if (!globals.includes(':focus-visible')) violations.push('styles/globals.css: missing :focus-visible');
 if (!globals.includes('prefers-reduced-motion')) violations.push('styles/globals.css: missing prefers-reduced-motion');
