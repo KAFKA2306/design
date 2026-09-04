@@ -4,9 +4,12 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import test from 'node:test'
+import { fileURLToPath } from 'node:url'
 import { currentDesignSha } from '../scripts/adoption-contract.mjs'
 import { checkConsumer } from '../scripts/design-conformance.mjs'
 import { syncConsumer } from '../scripts/design-sync.mjs'
+
+const designRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 
 function makeConsumer(overrides = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kafka-design-consumer-'))
@@ -29,6 +32,13 @@ function cleanup(root) {
 function runPortable(root) {
   return spawnSync(process.execPath, [path.join(root, '.kafka-design', 'portable-conformance.mjs'), '--consumer', root], {
     cwd: root,
+    encoding: 'utf8',
+  })
+}
+
+function runStructuredConformance(root) {
+  return spawnSync(process.execPath, [path.join(designRoot, 'scripts', 'design-conformance.mjs'), '--consumer', root, '--format', 'json'], {
+    cwd: designRoot,
     encoding: 'utf8',
   })
 }
@@ -75,6 +85,26 @@ test('portable conformance runs entirely from the synced managed bundle', () => 
     assert.equal(drift.status, 1)
     assert.match(drift.stderr, /\[duplicate-visual-authority\] styles\.css/)
     assert.match(drift.stderr, /\[forbidden-visual-effect\] styles\.css/)
+  } finally {
+    cleanup(root)
+  }
+})
+
+test('central conformance emits contract-valid structured violations for repair input', () => {
+  const root = makeConsumer()
+  try {
+    syncConsumer(root)
+    fs.appendFileSync(path.join(root, 'styles.css'), '\n.bad { background: #123456; }\n')
+    const result = runStructuredConformance(root)
+    assert.equal(result.status, 1, result.stderr)
+    const output = JSON.parse(result.stdout)
+    assert.equal(output.status, 'INVALID')
+    assert.ok(output.violations.some((violation) =>
+      violation.criterion === 'duplicate-visual-authority'
+      && violation.affected_surface === 'styles.css'
+      && violation.verification_method === 'design conformance'
+      && violation.evidence.length > 0
+    ))
   } finally {
     cleanup(root)
   }
