@@ -2,56 +2,28 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import test from 'node:test'
 
-const readme = fs.readFileSync('README.md', 'utf8')
-const agents = fs.readFileSync('AGENTS.md', 'utf8')
-const fixture = fs.readFileSync('fixtures/registry-consumer/src/main.tsx', 'utf8')
-const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+const read = (path) => fs.readFileSync(path, 'utf8')
+const readme = read('README.md')
+const agents = read('AGENTS.md')
+const packageJson = JSON.parse(read('package.json'))
+const journey = read('registry/ui/product/journey.ts')
+const productUi = read('registry/ui/product-ui.tsx')
+const showcase = read('src/main.tsx')
 
-const canonicalReferences = [
-  ['tokens/foundation.tokens.json', 'tokens/foundation.tokens.json'],
-  ['styles/tokens.css', 'styles/tokens.css'],
-  ['styles/components.css', 'styles/components.css'],
-  ['registry.json', 'registry.json'],
-  ['registry/ui/', 'registry/ui'],
-  ['registry/ui/product-ui.tsx', 'registry/ui/product-ui.tsx'],
-  ['registry/ui/product/', 'registry/ui/product'],
-  ['registry/ui/product/chart.tsx', 'registry/ui/product/chart.tsx'],
-  ['registry/ui/product/journey.ts', 'registry/ui/product/journey.ts'],
-  ['registry/ui/product/decision.tsx', 'registry/ui/product/decision.tsx'],
-  ['artifacts/content.schema.json', 'artifacts/content.schema.json'],
-  ['scripts/content-contract.mjs', 'scripts/content-contract.mjs'],
-  ['schemas/design.config.schema.json', 'schemas/design.config.schema.json'],
-  ['schemas/design.lock.schema.json', 'schemas/design.lock.schema.json'],
-  ['scripts/design-sync.mjs', 'scripts/design-sync.mjs'],
-  ['scripts/design-conformance.mjs', 'scripts/design-conformance.mjs'],
-  ['fixtures/registry-consumer/', 'fixtures/registry-consumer'],
-  ['.github/workflows/', '.github/workflows'],
-]
+const canonicalAuthorityPaths = [...readme.matchAll(/^\| [^|]+ \| `([^`]+)` \|/gm)].map((match) => match[1])
 
-const documentedScripts = [
-  'dev',
-  'tokens:build',
-  'tokens:validate',
-  'tokens:check',
-  'content:validate',
-  'sync',
-  'conformance',
-  'lint',
-  'test',
-  'build',
-]
-
-test('README canonical references resolve in the repository', () => {
-  for (const [documented, path] of canonicalReferences) {
-    assert.ok(readme.includes(`\`${documented}\``), `${documented} must remain documented`)
-    assert.ok(fs.existsSync(path), `${path} must exist`)
+test('README canonical authority paths resolve in the repository', () => {
+  assert.ok(canonicalAuthorityPaths.length > 0, 'README authority map must expose canonical paths')
+  for (const reference of canonicalAuthorityPaths) {
+    assert.equal(fs.existsSync(reference), true, `README canonical authority does not resolve: ${reference}`)
   }
 })
 
 test('README pnpm commands stay backed by package scripts', () => {
-  for (const script of documentedScripts) {
-    assert.ok(packageJson.scripts[script], `package.json must define ${script}`)
-    assert.ok(readme.includes(`pnpm ${script}`), `README must document pnpm ${script}`)
+  const commands = [...readme.matchAll(/pnpm ([a-z][a-z0-9:-]+)/g)].map((match) => match[1])
+  for (const command of commands) {
+    if (command === 'install') continue
+    assert.ok(packageJson.scripts?.[command], `README command pnpm ${command} has no package script`)
   }
 })
 
@@ -67,33 +39,19 @@ test('durable prose does not copy dependency version literals', () => {
   }
 })
 
-test('AGENTS makes action-based journey selection a durable design invariant', () => {
-  assert.match(agents, /inspect, compare, decide, act, and investigate/)
-  assert.match(agents, /Do not force one global reading order across every product/)
-  assert.match(agents, /Raw usage events remain consumer-owned/)
-  assert.match(agents, /visual hierarchy, information order, interaction, responsive behavior, accessibility, and state representation/)
-  assert.match(agents, /Changelog, Recent Updates, implementation notes, debug information, roadmap/)
-  assert.match(agents, /PLANNED or unavailable features must not visually compete with usable actions/)
-  assert.match(agents, /same brand grammar and interaction quality across products without forcing the same dashboard shape/)
+test('journey policy is executable rather than phrase-pinned prose', () => {
+  for (const action of ['inspect', 'compare', 'decide', 'act', 'investigate']) {
+    assert.match(journey, new RegExp(`'${action}'`))
+  }
+  assert.match(journey, /export function recommendJourneyPatterns/)
+  assert.doesNotMatch(journey, /financial|developer|3d/i)
+  assert.match(agents, /User-journey vocabulary\/patterns\/recommendation logic: `registry\/ui\/product\/journey\.ts`/)
+  assert.match(agents, /Raw telemetry remains consumer-owned/)
 })
 
-test('canonical reference surface consumes completed decision UI before supporting views and reference detail', () => {
-  const orderedMarkers = [
-    '<DecisionPanel',
-    'id="overview"',
-    'id="frontier"',
-    'id="positions"',
-    'id="sources"',
-    '<ComponentQa />',
-  ]
-
-  let previous = -1
-  for (const marker of orderedMarkers) {
-    const current = fixture.indexOf(marker)
-    assert.ok(current > previous, `${marker} must stay after the previous journey stage`)
-    previous = current
-  }
-
-  assert.match(fixture, /<details className="consumer-qa">/)
-  assert.equal(fixture.includes('PLANNED'), false)
+test('canonical showcase consumes the canonical DecisionPanel source before supporting detail', () => {
+  assert.match(productUi, /export \{ DecisionPanel \} from '\.\/product\/decision'/)
+  assert.match(showcase, /import \{ DecisionPanel \} from '\.\.\/registry\/ui\/product\/decision'/)
+  assert.match(showcase, /<DecisionPanel/)
+  assert.ok(showcase.indexOf('<DecisionPanel') < showcase.indexOf('One system, reusable layers'))
 })

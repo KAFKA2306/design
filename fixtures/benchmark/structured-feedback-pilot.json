@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "status": "synthetic-pilot",
+  "productionTruth": false,
+  "protocol": {
+    "conditions": ["generate-only", "pass-fail", "structured-one-shot", "structured-loop"],
+    "maxRepairIterations": 4,
+    "primaryMetrics": ["repair_success", "remaining_violations", "false_acceptance", "overcorrection", "iterations_to_verified"]
+  },
+  "tasks": [
+    {"id":"contract-001","category":"contract","surface":"DecisionPanel","defect":"required action callback is missing","groundTruth":{"criterion":"component-contract","affected_state":"usable","severity":"error","verification_method":"deterministic contract test"}},
+    {"id":"state-001","category":"state","surface":"StatusSurface","defect":"loading input renders as usable data","groundTruth":{"criterion":"state-separation","affected_state":"loading","severity":"error","verification_method":"deterministic state test"}},
+    {"id":"state-002","category":"state","surface":"StatusSurface","defect":"missing canonical evidence is silently converted to a plausible value","groundTruth":{"criterion":"unverified-evidence","affected_state":"unverified","severity":"error","verification_method":"deterministic provenance test"}},
+    {"id":"accessibility-001","category":"accessibility","surface":"ComparisonSurface","defect":"interactive control has no accessible name","groundTruth":{"criterion":"accessible-name","affected_state":"usable","severity":"error","verification_method":"standards-based accessibility test"}},
+    {"id":"journey-001","category":"journey","surface":"ProductUI","defect":"implementation notes precede the primary decision and action","groundTruth":{"criterion":"primary-task-order","affected_state":"usable","severity":"warning","verification_method":"predefined journey rubric"}}
+  ]
+}
