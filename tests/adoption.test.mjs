@@ -29,8 +29,13 @@ function cleanup(root) {
   fs.rmSync(root, { recursive: true, force: true })
 }
 
+function managedDir(root) {
+  const config = JSON.parse(fs.readFileSync(path.join(root, 'design.config.json'), 'utf8'))
+  return config.managedDir
+}
+
 function runPortable(root) {
-  return spawnSync(process.execPath, [path.join(root, '.kafka-design', 'portable-conformance.mjs'), '--consumer', root], {
+  return spawnSync(process.execPath, [path.join(root, managedDir(root), 'portable-conformance.mjs'), '--consumer', root], {
     cwd: root,
     encoding: 'utf8',
   })
@@ -85,6 +90,19 @@ test('portable conformance runs entirely from the synced managed bundle', () => 
     assert.equal(drift.status, 1)
     assert.match(drift.stderr, /\[duplicate-visual-authority\] styles\.css/)
     assert.match(drift.stderr, /\[forbidden-visual-effect\] styles\.css/)
+  } finally {
+    cleanup(root)
+  }
+})
+
+test('portable conformance honors a nested managedDir used by real consumers', () => {
+  const root = makeConsumer({ managedDir: 'web/.kafka-design' })
+  try {
+    syncConsumer(root)
+    assert.equal(fs.existsSync(path.join(root, 'web', '.kafka-design', 'portable-conformance.mjs')), true)
+    const clean = runPortable(root)
+    assert.equal(clean.status, 0, clean.stderr)
+    assert.match(clean.stdout, /design conformance: ok/)
   } finally {
     cleanup(root)
   }
