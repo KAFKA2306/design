@@ -35,6 +35,7 @@ function makeConsumer() {
     designSha: spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).stdout.trim(),
     preset: 'base',
     cssEntry: 'src/styles.css',
+    managedDir: '.kafka-design',
   }, null, 2));
   return consumer;
 }
