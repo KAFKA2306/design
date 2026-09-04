@@ -28,5 +28,19 @@ jobs:
           set -euo pipefail
           test -f "$CONSUMER_PATH/design.config.json"
           test -f "$CONSUMER_PATH/design.lock.json"
-          test -f "$CONSUMER_PATH/.kafka-design/portable-conformance.mjs"
-          node "$CONSUMER_PATH/.kafka-design/portable-conformance.mjs" --consumer "$CONSUMER_PATH"
+          MANAGED_DIR="$(node -e '
+            const fs = require("fs")
+            const path = require("path")
+            const root = path.resolve(process.env.CONSUMER_PATH)
+            const config = JSON.parse(fs.readFileSync(path.join(root, "design.config.json"), "utf8"))
+            if (typeof config.managedDir !== "string" || config.managedDir.trim().length === 0) {
+              throw new Error("design.config.json managedDir must be a non-empty string")
+            }
+            const resolved = path.resolve(root, config.managedDir)
+            if (resolved !== root && !resolved.startsWith(`${root}${path.sep}`)) {
+              throw new Error("design.config.json managedDir must stay inside consumer_path")
+            }
+            process.stdout.write(config.managedDir)
+          ')"
+          test -f "$CONSUMER_PATH/$MANAGED_DIR/portable-conformance.mjs"
+          node "$CONSUMER_PATH/$MANAGED_DIR/portable-conformance.mjs" --consumer "$CONSUMER_PATH"
