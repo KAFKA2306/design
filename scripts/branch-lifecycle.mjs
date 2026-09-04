@@ -17,7 +17,7 @@ export function branchesToDelete({ branches, defaultBranch, openPullRequests }) 
 }
 
 export function isMissingReferenceResponse(status, body) {
-  if (status !== 422) return false
+  if (status !== 404 && status !== 422) return false
   try {
     return JSON.parse(body)?.message === 'Reference does not exist'
   } catch {
