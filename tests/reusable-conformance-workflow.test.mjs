@@ -18,13 +18,17 @@ test('consumer conformance is exposed as a reusable workflow', () => {
   assert.match(source, /permissions:\n  contents: read/);
 });
 
-test('reusable workflow runs the managed portable verifier and fails on missing adoption files', () => {
+test('reusable workflow follows canonical managedDir and fails on missing adoption files', () => {
   const source = workflow();
   assert.match(source, /set -euo pipefail/);
   assert.match(source, /test -f \"\$CONSUMER_PATH\/design\.config\.json\"/);
   assert.match(source, /test -f \"\$CONSUMER_PATH\/design\.lock\.json\"/);
-  assert.match(source, /test -f \"\$CONSUMER_PATH\/\.kafka-design\/portable-conformance\.mjs\"/);
-  assert.match(source, /node \"\$CONSUMER_PATH\/\.kafka-design\/portable-conformance\.mjs\" --consumer \"\$CONSUMER_PATH\"/);
+  assert.match(source, /config\.managedDir/);
+  assert.match(source, /managedDir must be a non-empty string/);
+  assert.match(source, /managedDir must stay inside consumer_path/);
+  assert.match(source, /test -f \"\$CONSUMER_PATH\/\$MANAGED_DIR\/portable-conformance\.mjs\"/);
+  assert.match(source, /node \"\$CONSUMER_PATH\/\$MANAGED_DIR\/portable-conformance\.mjs\" --consumer \"\$CONSUMER_PATH\"/);
+  assert.doesNotMatch(source, /\$CONSUMER_PATH\/\.kafka-design\/portable-conformance\.mjs/);
 });
 
 test('third-party actions stay pinned to full commit SHAs', () => {
