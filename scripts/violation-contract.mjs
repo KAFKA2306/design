@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { readFile as readFileAsync } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { CONFORMANCE_EXPECTATIONS } from './conformance-policy.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const schema = JSON.parse(readFileSync(path.join(root, 'schemas/violation.schema.json'), 'utf8'));
@@ -10,15 +11,6 @@ const required = schema.required;
 const allowed = new Set(Object.keys(properties));
 export const states = new Set(properties.affected_state.enum);
 export const severities = new Set(properties.severity.enum);
-
-const expectedByCriterion = Object.freeze({
-  'managed-file-drift': 'managed files, lock state, and canonical integration match the pinned design SHA',
-  'duplicate-visual-authority': 'visual values use canonical design tokens instead of consumer-owned alternatives',
-  'forbidden-visual-effect': 'the consumer uses canonical design styles without prohibited local visual effects',
-  'chart-override': 'chart styling and Recharts usage stay inside the canonical Product UI chart adapter',
-  'mutable-design-ref': 'design workflow and action references use a full immutable Git SHA',
-  'design-owned-component-duplication': 'each design-owned component has one canonical source location',
-});
 
 export function validateViolation(value) {
   const errors = [];
@@ -46,7 +38,7 @@ export function structuredViolationFromConformanceError(error) {
   const criterion = typeof error.rule === 'string' ? error.rule.trim() : '';
   const affectedSurface = typeof error.path === 'string' ? error.path.trim() : '';
   const observed = typeof error.message === 'string' ? error.message.trim() : '';
-  const expected = expectedByCriterion[criterion];
+  const expected = CONFORMANCE_EXPECTATIONS[criterion];
   if (!criterion || !affectedSurface || !observed || !expected) throw new Error(`cannot structure conformance error: ${JSON.stringify(error)}`);
   return {
     criterion,
