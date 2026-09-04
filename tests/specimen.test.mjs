@@ -6,10 +6,13 @@ const app = fs.readFileSync('src/main.tsx', 'utf8');
 const globals = fs.readFileSync('styles/globals.css', 'utf8');
 const specimen = fs.readFileSync('src/specimen.css', 'utf8');
 
-test('specimen exposes required foundation sections', () => {
-  for (const label of ['Color', 'Typography', 'Density', 'Spacing', 'State', 'Focus']) {
-    assert.match(app, new RegExp(`>${label}<`));
+test('specimen exposes current canonical showcase sections', () => {
+  for (const label of ['One system, reusable layers', 'Token authority', 'What consumers get', 'Adopt']) {
+    assert.match(app, new RegExp(label));
   }
+  assert.match(app, /state-success/);
+  assert.match(app, /state-warning/);
+  assert.match(app, /state-danger/);
 });
 
 test('global accessibility rules are present', () => {
