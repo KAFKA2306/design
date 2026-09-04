@@ -9,6 +9,7 @@
     "tokens:build": "node scripts/build-tokens.mjs",
     "tokens:check": "node scripts/check-generated.mjs",
     "content:validate": "node scripts/content-contract.mjs fixtures/content/contract-example.json",
+    "violations:validate": "node scripts/violation-contract.mjs",
     "sync": "node scripts/design-sync.mjs",
     "conformance": "node scripts/design-conformance.mjs",
     "lint": "node scripts/lint.mjs && tsc --noEmit",
