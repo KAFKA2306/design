@@ -4,7 +4,13 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
 test('Pages source remains main branch', () => {
   const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'pages.yml'), 'utf8');
   assert.match(workflow, /push:\n    branches: \[main\]/);
+});
+
+test('Pages deployment is disabled while the repository is private', () => {
+  const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'pages.yml'), 'utf8');
+  assert.match(workflow, /verify-and-build:\n    if: github\.event\.repository\.private == false/);
 });
