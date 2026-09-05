@@ -1,0 +1,46 @@
+name: design conformance
+
+on:
+  workflow_call:
+    inputs:
+      consumer_path:
+        description: Path containing design.config.json and design.lock.json
+        required: false
+        type: string
+        default: .
+
+permissions:
+  contents: read
+
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    env:
+      CONSUMER_PATH: ${{ inputs.consumer_path }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22.19.0'
+      - name: Verify managed design adoption
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f "$CONSUMER_PATH/design.config.json"
+          test -f "$CONSUMER_PATH/design.lock.json"
+          MANAGED_DIR="$(node -e '
+            const fs = require("fs")
+            const path = require("path")
+            const root = path.resolve(process.env.CONSUMER_PATH)
+            const config = JSON.parse(fs.readFileSync(path.join(root, "design.config.json"), "utf8"))
+            if (typeof config.managedDir !== "string" || config.managedDir.trim().length === 0) {
+              throw new Error("design.config.json managedDir must be a non-empty string")
+            }
+            const resolved = path.resolve(root, config.managedDir)
+            if (resolved !== root && !resolved.startsWith(`${root}${path.sep}`)) {
+              throw new Error("design.config.json managedDir must stay inside consumer_path")
+            }
+            process.stdout.write(config.managedDir)
+          ')"
+          test -f "$CONSUMER_PATH/$MANAGED_DIR/portable-conformance.mjs"
+          node "$CONSUMER_PATH/$MANAGED_DIR/portable-conformance.mjs" --consumer "$CONSUMER_PATH"
