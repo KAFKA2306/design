@@ -15,6 +15,17 @@ test('Pages deploys validated production build', () => {
   assert.match(workflow, /needs: verify-and-build/);
 });
 
+test('Pages build and runtime expose the same exact commit provenance', () => {
+  const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'pages.yml'), 'utf8');
+  const vite = fs.readFileSync(path.join(root, 'vite.config.mjs'), 'utf8');
+  assert.match(vite, /fileName: 'provenance\.json'/);
+  assert.match(vite, /schemaVersion: 1, designSha: commitSha/);
+  assert.match(workflow, /provenance\.json/);
+  assert.match(workflow, /EXPECTED_SHA: \$\{\{ github\.sha \}\}/);
+  assert.match(workflow, /p\.designSha !== process\.env\.EXPECTED_SHA/);
+  assert.match(workflow, /exit 1/);
+});
+
 test('public specimen renders canonical Product UI instead of a Pages-only mock', () => {
   const source = fs.readFileSync(path.join(root, 'src', 'main.tsx'), 'utf8');
   assert.match(source, /from '\.\.\/registry\/ui\/product\/decision'/);
