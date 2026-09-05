@@ -22,6 +22,8 @@ test('Pages build and runtime expose the same exact commit provenance', () => {
   assert.match(vite, /schemaVersion: 1, designSha: commitSha/);
   assert.match(workflow, /provenance\.json/);
   assert.match(workflow, /EXPECTED_SHA: \$\{\{ github\.sha \}\}/);
+  assert.match(workflow, /Cache-Control: no-cache/);
+  assert.doesNotMatch(workflow, /curl[^\n]*--no-cache/);
   assert.match(workflow, /p\.designSha !== process\.env\.EXPECTED_SHA/);
   assert.match(workflow, /exit 1/);
 });
