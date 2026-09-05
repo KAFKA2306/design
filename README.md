@@ -1,3 +1,5 @@
+https://kafka2306.github.io/design/
+
 # KAFKA2306/design
 
 Canonical Web UI authority for KAFKA2306 repositories.
