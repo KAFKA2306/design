@@ -6,10 +6,10 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-test('Pages deploys verified /design/ build', () => {
+test('Pages deploys validated production build', () => {
   const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'pages.yml'), 'utf8');
   assert.match(workflow, /pnpm test/);
-  assert.match(workflow, /--base=\/design\//);
+  assert.match(workflow, /run: pnpm build/);
   assert.match(workflow, /actions\/upload-pages-artifact/);
   assert.match(workflow, /actions\/deploy-pages/);
   assert.match(workflow, /needs: verify-and-build/);
