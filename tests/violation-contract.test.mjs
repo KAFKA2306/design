@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { currentDesignSha } from '../scripts/adoption-contract.mjs';
 import { checkConsumer } from '../scripts/design-conformance.mjs';
 import { syncConsumer } from '../scripts/design-sync.mjs';
 import {
@@ -93,6 +94,21 @@ test('every emitted conformance criterion has a structured violation contract', 
     const bundle = structuredViolationBundleFromConformanceErrors(errors);
     assert.deepEqual(validateViolationBundle(bundle), []);
     assert.deepEqual(new Set(bundle.violations.map(({ criterion }) => criterion)), new Set(errors.map(({ rule }) => rule)));
+  } finally {
+    fs.rmSync(consumer, { recursive: true, force: true });
+  }
+});
+
+test('JSON conformance output identifies the exact verifier revision', () => {
+  const consumer = makeConsumer();
+  try {
+    syncConsumer(consumer);
+    const result = spawnSync(process.execPath, ['scripts/design-conformance.mjs', '--consumer', consumer, '--format', 'json'], { cwd: root, encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr);
+    const output = JSON.parse(result.stdout);
+    assert.equal(output.status, 'VERIFIED');
+    assert.equal(output.designSha, currentDesignSha());
+    assert.match(output.designSha, /^[0-9a-f]{40}$/);
   } finally {
     fs.rmSync(consumer, { recursive: true, force: true });
   }
