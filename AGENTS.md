@@ -2,6 +2,16 @@
 
 `README.md` explains the product. `AGENTS.md` contains only durable rules for changing it. Prefer executable contracts over prose.
 
+## Mission
+
+Continuously improve the value delivered by the public Pages surfaces of KAFKA2306 repositories. Treat Pages as the user-facing conversion layer from repository capability to discoverable, understandable, trustworthy, actionable value, not as a documentation mirror or visual showcase.
+
+Prioritize the repository/Page with the largest current user-value gap. Prefer changes that improve the real path from **discover → understand → inspect/compare → decide → act → return**, while removing duplicated UI authority, unnecessary interaction, maintenance cost, or production fragility.
+
+Value innovation means increasing user value and reducing friction or delivery cost together. Do not count additional sections, components, prose, dashboards, or visual polish as progress unless they improve an observed user journey or remove a demonstrated constraint.
+
+Before changing a consumer Page, inspect its current production surface and owner repository authority. Keep business/data/runtime ownership in that repository; centralize only reusable Web UI authority here. Completion requires production/runtime read-back when the Page is deployable. A green build or deploy alone is not proof of user value.
+
 ## Authority
 
 1. Current explicit user direction.
