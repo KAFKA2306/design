@@ -175,6 +175,20 @@ test('conformance rejects consumer visual authority and forbidden effects', () =
   }
 })
 
+test('conformance allows canonical SVG stroke/fill tokens and rejects local chart colors', () => {
+  const root = makeConsumer()
+  try {
+    syncConsumer(root)
+    fs.appendFileSync(path.join(root, 'styles.css'), '\n.canonical { stroke: var(--k-color-border); fill: currentColor; }\n')
+    assert.equal(checkConsumer(root).some((error) => error.rule === 'chart-override'), false)
+
+    fs.appendFileSync(path.join(root, 'styles.css'), '\n.local-chart { stroke: #123456; }\n')
+    assert.ok(checkConsumer(root).some((error) => error.rule === 'chart-override'))
+  } finally {
+    cleanup(root)
+  }
+})
+
 test('conformance rejects mutable design workflow references', () => {
   const root = makeConsumer()
   try {
