@@ -7,10 +7,21 @@ if (!/^[0-9a-f]{40}$/.test(commitSha)) {
   throw new Error(`invalid design commit SHA: ${commitSha}`);
 }
 
+const provenancePlugin = {
+  name: 'design-build-provenance',
+  generateBundle() {
+    this.emitFile({
+      type: 'asset',
+      fileName: 'provenance.json',
+      source: `${JSON.stringify({ schemaVersion: 1, designSha: commitSha }, null, 2)}\n`,
+    });
+  },
+};
+
 export default defineConfig({
   base: '/design/',
   define: {
     __DESIGN_COMMIT_SHA__: JSON.stringify(commitSha),
   },
-  plugins: [react()],
+  plugins: [react(), provenancePlugin],
 });
