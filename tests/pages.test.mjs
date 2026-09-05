@@ -24,7 +24,7 @@ test('public specimen renders canonical Product UI instead of a Pages-only mock'
 
 test('public specimen exposes exact deployed source provenance', () => {
   const source = fs.readFileSync(path.join(root, 'src', 'main.tsx'), 'utf8');
-  const vite = fs.readFileSync(path.join(root, 'vite.config.ts'), 'utf8');
+  const vite = fs.readFileSync(path.join(root, 'vite.config.mjs'), 'utf8');
   assert.match(vite, /git', \['rev-parse', 'HEAD'\]/);
   assert.match(vite, /\^\[0-9a-f\]\{40\}\$/);
   assert.match(vite, /__DESIGN_COMMIT_SHA__/);
