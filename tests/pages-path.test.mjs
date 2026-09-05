@@ -3,8 +3,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { build } from 'vite';
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-test('Pages build targets repository project path', () => {
-  const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'pages.yml'), 'utf8');
-  assert.match(workflow, /--base=\/design\//);
+
+test('Pages build emits repository-scoped asset URLs', async () => {
+  await build({ root, logLevel: 'silent' });
+
+  const html = fs.readFileSync(path.join(root, 'dist', 'index.html'), 'utf8');
+  assert.match(html, /src="\/design\/assets\/[^"]+\.js"/);
+  assert.match(html, /href="\/design\/assets\/[^"]+\.css"/);
+  assert.doesNotMatch(html, /(src|href)="\/assets\//);
 });
