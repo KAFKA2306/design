@@ -80,3 +80,24 @@ pnpm build
 The executable scripts in `package.json` and CI workflows are authoritative if command details change.
 
 ## Consumer adoption
+
+A consumer owns one hand-edited `design.config.json`. Pin `designSha` to the exact 40-character commit of this repository, set the consumer CSS entry and managed directory, then run the checked-out design revision:
+
+```bash
+pnpm sync --consumer <consumer-path>
+pnpm conformance --consumer <consumer-path>
+```
+
+`sync` copies canonical managed CSS, inserts one managed import block into the configured CSS entry, removes obsolete managed files recorded by the prior lock, and writes deterministic `design.lock.json` state. Running the same sync twice must produce no second diff.
+
+`conformance` fails with a rule name and file path when the immutable design pin, managed files/import block, visual authority, forbidden effects, core-component duplication, or chart ownership drift.
+
+A consumer chooses from canonical action-based journey candidates rather than inheriting a domain-specific dashboard shape. It may pass structural evidence and normalized aggregate importance/frequency signals to the Product UI journey API. Raw telemetry remains in the consumer.
+
+For recurring decision surfaces, use the completed Product UI component instead of rebuilding its title/status/action/measure/evidence hierarchy in the consumer.
+
+## Documentation rule
+
+Keep durable architecture and authority here. Keep contributor invariants in `AGENTS.md`. Keep the agent execution workflow in `skills/frontend-design/SKILL.md`. Keep current work status and acceptance criteria in GitHub Issues and pull requests.
+
+Do not copy dependency versions, registry inventories, or issue progress into prose documentation; link to the executable or structured authority instead.
