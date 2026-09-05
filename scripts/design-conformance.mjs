@@ -9,6 +9,7 @@ import {
   assertPinnedToCurrentDesign,
   buildIntegrationBlock,
   buildResolvedManifest,
+  currentDesignSha,
   expectedLock,
   loadConsumerConfig,
   readJson,
@@ -97,7 +98,7 @@ if (isCli) {
     const errors = checkConsumer(consumerPath)
     if (format === 'json') {
       const bundle = structuredViolationBundleFromConformanceErrors(errors)
-      console.log(JSON.stringify({ status: errors.length === 0 ? 'VERIFIED' : 'INVALID', ...bundle }, null, 2))
+      console.log(JSON.stringify({ status: errors.length === 0 ? 'VERIFIED' : 'INVALID', designSha: currentDesignSha(), ...bundle }, null, 2))
     } else if (errors.length === 0) {
       console.log('design conformance: ok')
     } else {
