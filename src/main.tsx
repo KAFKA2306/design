@@ -6,12 +6,16 @@ import '../styles/globals.css';
 import '../styles/components.css';
 import './specimen.css';
 
+declare const __DESIGN_COMMIT_SHA__: string;
+
 type Theme = 'light' | 'dark';
 
 const palette = [
   ['Canvas', 'canvas'], ['Surface', 'surface'], ['Foreground', 'foreground'], ['Primary', 'primary'],
   ['Accent', 'accent'], ['Success', 'success'], ['Warning', 'warning'], ['Danger', 'danger'],
 ] as const;
+
+const deployedCommitUrl = `https://github.com/KAFKA2306/design/commit/${__DESIGN_COMMIT_SHA__}`;
 
 function App() {
   const [theme, setTheme] = useState<Theme>('light');
@@ -27,7 +31,7 @@ function App() {
           <p className="eyebrow">KAFKA2306 / DESIGN</p>
           <h1>Decision-first UI authority.</h1>
           <p className="lede">Tokens, components, product surfaces, journey grammar, and conformance checks live in one canonical repository. This page is built from that same authority.</p>
-          <p><a href="https://github.com/KAFKA2306/design">View source on GitHub</a></p>
+          <p><a href="https://github.com/KAFKA2306/design">View source on GitHub</a> · <a href={deployedCommitUrl}>Deployed commit {__DESIGN_COMMIT_SHA__.slice(0, 7)}</a></p>
         </div>
         <button className="theme-toggle" type="button" aria-pressed={theme === 'dark'} onClick={() => applyTheme(theme === 'light' ? 'dark' : 'light')}>
           {theme === 'light' ? 'Dark' : 'Light'}
@@ -40,8 +44,8 @@ function App() {
         decision="Adopt the authority, not a screenshot"
         rationale="Consumers sync pinned canonical source and verify conformance instead of copying visual rules."
         state="ready"
-        primaryAction={{ label: 'Inspect registry', onClick: () => { window.location.href = 'https://github.com/KAFKA2306/design/tree/main/registry/ui'; } }}
-        secondaryAction={{ label: 'Read adoption contract', onClick: () => { window.location.href = 'https://github.com/KAFKA2306/design#consumer-adoption'; } }}
+        primaryAction={{ label: 'Inspect registry', onClick: () => { window.location.href = `https://github.com/KAFKA2306/design/tree/${__DESIGN_COMMIT_SHA__}/registry/ui`; } }}
+        secondaryAction={{ label: 'Read adoption contract', onClick: () => { window.location.href = `https://github.com/KAFKA2306/design/blob/${__DESIGN_COMMIT_SHA__}/README.md#consumer-adoption`; } }}
         evidence={[
           { label: 'Source', detail: 'registry/ui/product/decision.tsx' },
           { label: 'Verification', detail: 'Contract tests + deterministic consumer conformance' },
