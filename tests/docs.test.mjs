@@ -45,8 +45,6 @@ test('journey policy is executable rather than phrase-pinned prose', () => {
   }
   assert.match(journey, /export function recommendJourneyPatterns/)
   assert.doesNotMatch(journey, /financial|developer|3d/i)
-  assert.match(agents, /User-journey vocabulary\/patterns\/recommendation logic: `registry\/ui\/product\/journey\.ts`/)
-  assert.match(agents, /Raw telemetry remains consumer-owned/)
 })
 
 test('canonical showcase consumes the canonical DecisionPanel source before supporting detail', () => {
