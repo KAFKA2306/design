@@ -6,6 +6,7 @@ Use this skill for Web UI review and adoption in KAFKA2306 consumer repositories
 
 Use the current repository authorities directly:
 
+- `AGENTS.md`
 - `registry.json`
 - `registry/ui/product-ui.tsx`
 - `registry/ui/product/journey.ts`
@@ -20,7 +21,7 @@ Use the current repository authorities directly:
 3. Prefer existing Product UI components and shared primitives before consumer-local UI.
 4. Remove obsolete consumer-local visual authority when adopting the shared design system.
 5. Adopt the selected design revision through the current config and sync path.
-6. Verify the resulting consumer surface and the relevant repository conformance.
+6. Verify the requested consumer outcome under the repository-wide verification rules in `AGENTS.md`. For a rendered or deployed UI change, read the resulting surface.
 
 ## Scope
 
