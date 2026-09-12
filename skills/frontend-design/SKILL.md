@@ -1,10 +1,10 @@
 # Frontend design
 
-Use this skill for Web UI review and adoption in KAFKA2306 consumer repositories.
+Use only when reviewing or adopting KAFKA2306 shared Web UI in a consumer repository.
 
 ## Sources
 
-Use the current repository authorities directly:
+Route to the current repository authorities:
 
 - `AGENTS.md`
 - `registry.json`
@@ -17,14 +17,12 @@ Use the current repository authorities directly:
 ## Workflow
 
 1. Inspect the consumer's actual UI, navigation, data, actions, states, and current design ownership.
-2. Express the user task with the journey actions implemented in `registry/ui/product/journey.ts`.
-3. Prefer existing Product UI components and shared primitives before consumer-local UI.
-4. Remove obsolete consumer-local visual authority when adopting the shared design system.
-5. Adopt the selected design revision through the current config and sync path.
-6. Verify the requested consumer outcome under the repository-wide verification rules in `AGENTS.md`. For a rendered or deployed UI change, read the resulting surface.
+2. Map the user task to `registry/ui/product/journey.ts` and prefer existing Product UI components before consumer-local UI.
+3. Adopt the selected design revision through the current config/sync path, removing obsolete consumer-local visual authority that it replaces.
+4. Use `AGENTS.md` for repository-wide verification; for a rendered or deployed UI change, inspect the resulting surface.
 
 ## Scope
 
-This skill covers Web UI. Consumer business logic, data logic, and raw usage-event storage remain consumer-owned.
+This skill covers Web UI adoption. Consumer business logic, data logic, and raw usage-event storage remain consumer-owned.
 
 Do not copy token values, dependency versions, component signatures, registry inventories, or current issue status into this file.
