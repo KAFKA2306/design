@@ -98,3 +98,7 @@ The reusable workflow delegates to the consumer's synced portable verifier. It d
 A consumer chooses from canonical action-based journey candidates rather than inheriting a domain-specific dashboard shape. It may pass structural evidence and normalized aggregate importance/frequency signals to the Product UI journey API. Raw telemetry remains in the consumer.
 
 For recurring decision surfaces, use the completed Product UI component instead of rebuilding its title/status/action/measure/evidence hierarchy in the consumer.
+
+## Operational ontology
+
+[Project ontology](ontology/project.yaml) connects canonical entities and relationships to source evidence, guarded actions and measurable outcomes under the [shared causal-evidence vocabulary](https://github.com/KAFKA2306/know/blob/main/ontology/causal-evidence-core.yaml). It documents the existing workflow's decision boundary without claiming a new execution engine or paid service.
