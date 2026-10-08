@@ -1,0 +1,85 @@
+project:
+  id: "kafka:design"
+  name: "KAFKA Product UI Authority"
+  repository: "https://github.com/KAFKA2306/design"
+  version: "0.1.0"
+  updated: "2026-10-08"
+  core_ontology: "https://raw.githubusercontent.com/KAFKA2306/know/main/ontology/causal-evidence-core.yaml"
+
+purpose:
+  problem: "Make design token and consumer application provenance auditable without duplicating domain logic or shipping divergent generated UI components."
+  intended_decisions: ["accept_canonical_change","sync_consumer","reject_drift","publish_release"]
+  success_conditions:
+    - "Consumers pin a full 40-character canonical design commit."
+    - "Regenerated tokens and installed components match their canonical sources."
+    - "Failures in conformance cannot be treated as a successful adoption."
+  falsification_conditions:
+    - "A consumer edits a copied managed component and falsely claims canonical adoption."
+    - "A lockfile points to unknown design revision."
+    - "Visual checks infer business-data correctness outside design's authority."
+
+scope:
+  included: ["design tokens","component registry","consumer config","design lock","canonical UI source","conformance evidence","release"]
+  excluded: ["consumer business logic","consumer raw telemetry","private production states","unverified aesthetic improvement claims"]
+  temporal: "Publication, effective date, source observation, source revision and decision time are explicit and not inferred."
+  abstraction_level: "Existing repository authority, not a new central runtime."
+
+competency_questions:
+  - "Which design revision supplies this consumer's UI?"
+  - "Which generated files or imports drifted from canonical source?"
+  - "What verifiable tests permitted a design adoption or release?"
+  - "What evidence supports an observed usage improvement rather than aesthetic intent?"
+
+domain_mapping:
+  System: "CanonicalDesignConformanceSystem"
+  State: ["canonical design revision","consumer installation state","conformance state","release state"]
+  Action: ["update canonical tokens","build derived CSS","sync consumer","run conformance","release"]
+  Process: ["token generation","component registry build","consumer install","conformance validation","Pages release"]
+  Observation: ["design SHA","consumer lock","build result","conformance report","published Pages"]
+  Model: ["design token grammar","registry contract","content schema","Product UI journey grammar"]
+  Requirement: ["single design authority","full-SHA pinning","deterministic sync","accessibility","least privilege"]
+  Claim: ["consumer conforms to pinned revision","generated UI matches canonical","release passed conformance"]
+  Evidence: ["registry.json","design.config.json","design.lock.json","conformance logs","commit hash"]
+  Decision: ["accept_canonical_change","sync_consumer","reject_drift","publish_release"]
+
+claims_and_evidence:
+  assertion_types: ["ObservedFact","ReportedFact","CalculatedValue","RequirementAssertion","DecisionAssertion"]
+  required_evidence:
+    MaterialClaim: ["source ID","source date","target object ID","exact scope","record hash"]
+    Decision: ["rule ID","source evidence ID","decision outcome"]
+  unknown_policy: "Missing, incompatible or stale source evidence is UNKNOWN, not PASS or deployed."
+
+decision_rules:
+  - id: "accept-consumer-sync"
+    when: "Pinned design SHA and managed-file hashes agree, and consumer conformance passes."
+    result: "sync_consumer"
+  - id: "reject-drift"
+    when: "Canonical source, managed copy or lock state diverges or evidence is missing."
+    result: "reject_drift"
+
+provenance:
+  sources: ["design canonical source tree","consumer config/lock","repository CI evidence"]
+  generated_artifacts: ["registry.json","generated tokens CSS","consumer lock","conformance report"]
+  agents: ["existing repository job runners","GitHub Actions","reviewer"]
+  lineage: "Canonical revision -> generated token/registry artifact -> consumer pin -> conformance -> release."
+
+validation:
+  structural: "Registry and lockfile schema and content hashes validate."
+  semantic: "Consumer authority cannot overwrite owning business semantics."
+  evidence: "Conformance records include exact design revision and consumer identity."
+  publication: "Only verified conformance permits canonical-adoption claims; usage improvements need separate measurements."
+
+operational_model:
+  implementation_status: "mapped_to_existing_workflow; action executor not claimed without run evidence"
+  canonical_sources: ["registry.json","scripts/design-sync.mjs","scripts/design-conformance.mjs","schemas/design.lock.schema.json"]
+  objects: ["DesignRevision","Token","Component","Consumer","Adoption","ConformanceRun","Evidence"]
+  links:
+    - ["DesignRevision","DEFINES","Component"]
+    - ["Consumer","PINS","DesignRevision"]
+    - ["ConformanceRun","VERIFIES","Adoption"]
+  actions:
+    - id: "approve_consumer_design_adoption"
+      preconditions: "Exact design SHA, managed files, consumer config and conformance results agree."
+      recorded_effect: "Consumer may publish a verifiable design.lock-based adoption state."
+      rollback_or_recovery: "Fail conformance and withhold canonical status; preserve prior pinned revision."
+  outcome_metrics: ["consumer_conformance_pass_ratio","drifted_managed_files","adoption_reproducibility"]
