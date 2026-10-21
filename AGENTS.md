@@ -15,6 +15,10 @@ Improve the user-facing Pages experience across KAFKA2306 repositories while cen
 
 Do not create competing UI authorities or copied consumer implementations.
 
+Treat older mockups, palettes, draft version labels, and generated examples as non-authoritative. Remove superseded prose instead of preserving conflicting descriptions. Keep current values in the canonical source and update only the minimum explanatory text needed to locate and apply it.
+
+Touch targets on coarse-pointer devices must use the shared touch-target token across viewport sizes; do not infer touch capability from viewport width alone. WCAG success-criterion levels must be cited precisely, and automated checks do not establish full accessibility compliance.
+
 ## Product rules
 
 Optimize the real path from discovery through understanding, comparison, decision, action, and investigation. Prefer fixing hierarchy, interaction, state, accessibility, and component reuse over adding explanatory prose or decorative sections.

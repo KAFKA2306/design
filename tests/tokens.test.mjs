@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { flattenTokens, generateCss, readTokens, resolveToken, validateTokens } from '../scripts/token-lib.mjs';
 
-test('v0 visual anchors are canonical token values', () => {
+test('visual anchors follow the canonical token values', () => {
   const root = readTokens();
   const tokens = validateTokens(root);
   assert.equal(resolveToken('color.light.canvas', tokens).value.hex, '#F7F5EF');

@@ -6,14 +6,26 @@ Canonical Web UI authority for KAFKA2306 repositories.
 
 The public Pages surface shows the current canonical Product UI specimen. Source, contracts, and verification remain authoritative in this repository.
 
-This repository owns shared visual rules, reusable UI source, completed purpose components, interaction grammar, and canonical user-journey patterns. Consumer repositories own business logic, data logic, deployment/runtime, and raw usage telemetry.
+This repository owns reusable visual rules, UI components, interaction states, and action-based journeys. Consumer repositories own their business logic, data, deployment, and raw usage telemetry.
+
+## Current design contract
+
+- **Decision first:** make the next action, the reason for it, and supporting evidence easy to find. Preserve the distinction between actual, forecast, hypothesis, and unavailable or unverified information.
+- **One visual authority:** change `tokens/foundation.tokens.json` and shared components here; regenerate derived CSS. Do not copy visual values or reinvent shared UI inside consumers.
+- **Responsive interaction:** support keyboard and touch, visible focus, 320px reflow, and reduced motion. A coarse pointer uses the 44px touch-target token on shared controls at any viewport width; a dense desktop pointer may use the 32px control-height token.
+- **State before decoration:** include usable, loading, empty, error, unavailable, and relevant unverified states. No gratuitous gradients, shadows, or information-hiding effects.
+- **Verification over claims:** unit and conformance checks do not prove real-device usability or WCAG conformance. Test rendered UI, keyboard navigation, accessible names, screen-reader behavior, and device reflow before making those claims.
+
+Current visual values are defined only in [foundation tokens](tokens/foundation.tokens.json); examples and historical concept images are not authoritative. Follow the source and verify actual rendering rather than reusing an older palette or sample.
+
+Standards references: [Design Tokens Community Group 2025.10](https://www.designtokens.org/tr/2025.10/) (a community specification, not a W3C Recommendation); [WCAG 2.2 2.5.8 AA target-size minimum](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) (24 CSS px with exceptions); [WCAG 2.2 2.5.5 AAA enhanced target size](https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html) (44 CSS px with exceptions). The 44px token is an intentional interaction guideline, not proof of AAA compliance.
 
 ## Scope
 
 Owned here:
 
 - visual tokens and generated foundation styles
-- shared primitives and completed Product UI source
+- shared primitives and Product UI source
 - chart, table, navigation, responsive, accessibility, and state grammar
 - action-based user-journey patterns and recommendation contract
 - cross-format semantic/content contract used by Web UI
@@ -38,7 +50,7 @@ Not owned here:
 | Registry manifest | `registry.json` | registry CI |
 | UI implementation | `registry/ui/` | installed consumer copies |
 | Product UI public entrypoint | `registry/ui/product-ui.tsx` | implementation under `registry/ui/product/` |
-| Completed decision UI | `registry/ui/product/decision.tsx` | reference consumer + Product UI tests |
+| Decision and action UI | `registry/ui/product/decision.tsx` | reference consumer + Product UI tests |
 | Product chart grammar | `registry/ui/product/chart.tsx` | Product UI fixture + contract tests |
 | User journey | `registry/ui/product/journey.ts` | Product UI tests + consumer aggregate inputs |
 | Agent workflow | `skills/frontend-design/SKILL.md` | skill contract tests |
@@ -97,7 +109,7 @@ The reusable workflow delegates to the consumer's synced portable verifier. It d
 
 A consumer chooses from canonical action-based journey candidates rather than inheriting a domain-specific dashboard shape. It may pass structural evidence and normalized aggregate importance/frequency signals to the Product UI journey API. Raw telemetry remains in the consumer.
 
-For recurring decision surfaces, use the completed Product UI component instead of rebuilding its title/status/action/measure/evidence hierarchy in the consumer.
+For recurring decision surfaces, use the canonical Product UI component instead of rebuilding its title/status/action/measure/evidence hierarchy in the consumer.
 
 ## Operational ontology
 

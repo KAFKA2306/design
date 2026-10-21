@@ -213,7 +213,13 @@ tbody tr:last-child td {
   .two-column { grid-template-columns: 1fr; gap: var(--k-dimension-space4); }
 }
 
+@media (pointer: coarse) {
+  .theme-toggle,
+  input {
+    min-height: var(--k-dimension-touch-target);
+  }
+}
+
 @media (max-width: 24rem) {
   .color-grid { grid-template-columns: 1fr; }
-  .theme-toggle { min-height: var(--k-dimension-touch-target); }
 }
