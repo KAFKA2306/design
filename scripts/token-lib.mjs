@@ -46,7 +46,7 @@ export function validateTokens(root) {
     }
     switch (token.$type) {
       case 'color':
-        assert(value && value.colorSpace === 'srgb', `${name}: colorSpace must be srgb in v0`);
+        assert(value && value.colorSpace === 'srgb', `${name}: colorSpace must be srgb`);
         assert(Array.isArray(value.components) && value.components.length === 3, `${name}: sRGB requires 3 components`);
         value.components.forEach((component) => assert(typeof component === 'number' && component >= 0 && component <= 1, `${name}: invalid sRGB component`));
         assert(/^#[0-9A-Fa-f]{6}$/.test(value.hex ?? ''), `${name}: 6-digit hex fallback required`);
@@ -61,7 +61,7 @@ export function validateTokens(root) {
         assert((typeof value === 'string' && value.length > 0) || (Array.isArray(value) && value.length > 0 && value.every((item) => typeof item === 'string' && item.length > 0)), `${name}: invalid fontFamily`);
         break;
       default:
-        throw new Error(`${name}: unsupported token type in v0 validator: ${token.$type}`);
+        throw new Error(`${name}: unsupported token type: ${token.$type}`);
     }
   }
   return tokens;
