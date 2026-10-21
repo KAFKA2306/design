@@ -5,7 +5,7 @@ import test from 'node:test';
 const registry = JSON.parse(fs.readFileSync('registry.json', 'utf8'));
 const base = registry.items.find((item) => item.name === 'kafka-base');
 
-test('kafka-base is the single v0 design-system base', () => {
+test('kafka-base is the only canonical design-system base', () => {
   assert.ok(base);
   assert.equal(base.type, 'registry:base');
   assert.equal(base.extends, 'none');
