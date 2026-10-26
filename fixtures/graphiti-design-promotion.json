@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "status": "candidate",
+  "sourceState": "active",
+  "lesson": "Primary actions must keep a machine-identifiable accessible label.",
+  "target": {
+    "kind": "component",
+    "authorityPath": "registry.json#kafka-button"
+  },
+  "expectedAuthorityHash": "199212be3f375ef5d145a93262d09ea2fdaa528a",
+  "provenance": {
+    "repo": "KAFKA2306/readable-github",
+    "commit": "0123456789abcdef0123456789abcdef01234567",
+    "evidence": "tests/accessibility-primary-action.test.ts",
+    "graphitiId": "lesson-primary-action-label-v1",
+    "observedAt": "2026-09-17T00:00:00Z"
+  }
+}
