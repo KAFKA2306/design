@@ -5,10 +5,9 @@
   "lesson": "Primary actions must keep a machine-identifiable accessible label.",
   "target": {
     "kind": "component",
-    "authorityPath": "registry.json#kafka-base"
+    "authorityPath": "registry.json#kafka-button"
   },
-  "expectedAuthorityHash": "registry-v1",
-  "currentAuthorityHash": "registry-v1",
+  "expectedAuthorityHash": "199212be3f375ef5d145a93262d09ea2fdaa528a",
   "provenance": {
     "repo": "KAFKA2306/readable-github",
     "commit": "0123456789abcdef0123456789abcdef01234567",
