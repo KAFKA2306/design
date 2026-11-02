@@ -27,6 +27,20 @@
       "warning": { "$value": { "colorSpace": "srgb", "components": [0.984314, 0.74902, 0.141176], "alpha": 1, "hex": "#FBBF24" } },
       "danger": { "$value": { "colorSpace": "srgb", "components": [0.972549, 0.443137, 0.443137], "alpha": 1, "hex": "#F87171" } },
       "focus": { "$value": "{color.dark.primary}" }
+    },
+    "paper": {
+      "$type": "color",
+      "canvas": { "$value": { "colorSpace": "srgb", "components": [0.968627, 0.960784, 0.937255], "alpha": 1, "hex": "#F7F5EF" } },
+      "surface": { "$value": { "colorSpace": "srgb", "components": [1, 1, 1], "alpha": 1, "hex": "#FFFFFF" } },
+      "foreground": { "$value": { "colorSpace": "srgb", "components": [0.145098, 0.137255, 0.129412], "alpha": 1, "hex": "#252321" } },
+      "mutedForeground": { "$value": { "colorSpace": "srgb", "components": [0.341176, 0.32549, 0.305882], "alpha": 1, "hex": "#57534E" } },
+      "border": { "$value": { "colorSpace": "srgb", "components": [0.788235, 0.768627, 0.72549], "alpha": 1, "hex": "#C9C4B9" } },
+      "primary": { "$value": { "colorSpace": "srgb", "components": [0.603922, 0.25098, 0.117647], "alpha": 1, "hex": "#9A401E" } },
+      "accent": { "$value": { "colorSpace": "srgb", "components": [0.905882, 0.835294, 0.686275], "alpha": 1, "hex": "#E7D5AF" } },
+      "success": { "$value": { "colorSpace": "srgb", "components": [0.145098, 0.45098, 0.286275], "alpha": 1, "hex": "#257349" } },
+      "warning": { "$value": { "colorSpace": "srgb", "components": [0.545098, 0.34902, 0.070588], "alpha": 1, "hex": "#8B5912" } },
+      "danger": { "$value": { "colorSpace": "srgb", "components": [0.705882, 0.137255, 0.094118], "alpha": 1, "hex": "#B42318" } },
+      "focus": { "$value": "{color.paper.primary}" }
     }
   },
   "dimension": {

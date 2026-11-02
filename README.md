@@ -16,6 +16,8 @@ This repository owns reusable visual rules, UI components, interaction states, a
 - **State before decoration:** include usable, loading, empty, error, unavailable, and relevant unverified states. No gratuitous gradients, shadows, or information-hiding effects.
 - **Verification over claims:** unit and conformance checks do not prove real-device usability or WCAG conformance. Test rendered UI, keyboard navigation, accessible names, screen-reader behavior, and device reflow before making those claims.
 
+When a product must avoid navy, use the explicit `data-theme="paper"` palette generated from the canonical tokens. This warm neutral variant is opt-in; the default light and dark palettes remain unchanged. Do not recreate its color values in consumer styles.
+
 Current visual values are defined only in [foundation tokens](tokens/foundation.tokens.json); examples and historical concept images are not authoritative. Follow the source and verify actual rendering rather than reusing an older palette or sample.
 
 Standards references: [Design Tokens Community Group 2025.10](https://www.designtokens.org/tr/2025.10/) (a community specification, not a W3C Recommendation); [WCAG 2.2 2.5.8 AA target-size minimum](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) (24 CSS px with exceptions); [WCAG 2.2 2.5.5 AAA enhanced target size](https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html) (44 CSS px with exceptions). The 44px token is an intentional interaction guideline, not proof of AAA compliance.
