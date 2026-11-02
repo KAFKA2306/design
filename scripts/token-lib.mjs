@@ -99,11 +99,13 @@ export function generateCss(root) {
   const shared = [];
   const light = [];
   const dark = [];
+  const paper = [];
   for (const name of [...tokens.keys()].sort()) {
     const resolved = resolveToken(name, tokens);
-    const line = `  ${cssName(name.replace(/^color\.(light|dark)\./, 'color.'))}: ${cssValue(resolved)};`;
+    const line = `  ${cssName(name.replace(/^color\.(light|dark|paper)\./, 'color.'))}: ${cssValue(resolved)};`;
     if (name.startsWith('color.light.')) light.push(line);
     else if (name.startsWith('color.dark.')) dark.push(line);
+    else if (name.startsWith('color.paper.')) paper.push(line);
     else shared.push(`  ${cssName(name)}: ${cssValue(resolved)};`);
   }
   const autoDark = dark.map((line) => `  ${line}`);
@@ -118,6 +120,11 @@ export function generateCss(root) {
     '[data-theme="dark"] {',
     '  color-scheme: dark;',
     ...dark,
+    '}',
+    '',
+    '[data-theme="paper"] {',
+    '  color-scheme: light;',
+    ...paper,
     '}',
     '',
     '@media (prefers-color-scheme: dark) {',
