@@ -45,3 +45,16 @@ test('malformed colors fail loudly', () => {
   root.color.light.canvas.$value.components = [2, 0, 0];
   assert.throws(() => validateTokens(root), /invalid sRGB component/);
 });
+
+test('paper theme is explicit, neutral and contains no blue-dominant navy colors', () => {
+  const tokens = validateTokens(readTokens());
+  const css = generateCss(readTokens());
+  const paper = [...tokens.keys()].filter((name) => name.startsWith('color.paper.'));
+  assert.equal(paper.length, 11);
+  assert.match(css, /\[data-theme="paper"\] \{[\s\S]*?--k-color-foreground: #252321;/);
+  for (const name of paper) {
+    const { value } = resolveToken(name, tokens);
+    const [red, green, blue] = value.components;
+    assert.ok(blue <= Math.max(red, green), `${name} must not be blue-dominant`);
+  }
+});
