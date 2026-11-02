@@ -47,6 +47,21 @@
   --k-color-warning: #FBBF24;
 }
 
+[data-theme="paper"] {
+  color-scheme: light;
+  --k-color-accent: #E7D5AF;
+  --k-color-border: #C9C4B9;
+  --k-color-canvas: #F7F5EF;
+  --k-color-danger: #B42318;
+  --k-color-focus: #9A401E;
+  --k-color-foreground: #252321;
+  --k-color-muted-foreground: #57534E;
+  --k-color-primary: #9A401E;
+  --k-color-success: #257349;
+  --k-color-surface: #FFFFFF;
+  --k-color-warning: #8B5912;
+}
+
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
     color-scheme: dark;
