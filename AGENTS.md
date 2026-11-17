@@ -27,6 +27,10 @@ Important surfaces must represent usable, loading, empty, error, unavailable, an
 
 Prefer types, schemas, tests, and conformance checks over prose when they can enforce the contract.
 
+## Design workflow
+
+For changes to shared Web UI patterns or their adoption in a consumer, use [Kafstyler's design-pattern guidance](https://github.com/KAFKA2306/kafstyler/blob/main/BIBLES.md#かふかのデザインパターン) to define the user action and how to verify it. Apply the [frontend design workflow](skills/frontend-design/SKILL.md#workflow) when choosing and syncing shared UI in a consumer.
+
 ## Runtime boundary
 
 A build or deploy is not evidence that the user journey works. When the requested outcome includes a rendered or deployed UI, verify the resulting surface directly. Unchecked layers remain `UNVERIFIED`.
