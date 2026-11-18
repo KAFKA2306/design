@@ -1,6 +1,6 @@
 ---
 type: "guide"
-description: "初見で用途が伝わるかを試し、操作が止まった箇所を修正と再検証につなげる手順。"
+description: "初見の利用者が欲しい答えを得られるかを試し、判断が止まった箇所を修正と再検証につなげる手順。"
 tags:
   - design/frontend
   - design/review
@@ -8,22 +8,23 @@ tags:
 
 # 初めて使う人の視点で画面を評価する
 
-成果物のURLを受け取ったら、まず普段の入口を開く。「誰の何に使えるか」「次にどこを操作するか」を画面だけで説明できるか確かめる。次に、想定する利用者が実際に行う作業を一つ試す。
+普段の入口から、初めて来た人が用途を理解し、自分の用事を済ませられるか確かめる。候補一覧や比較画面を開けても、選ぶ理由が得られなければ判断は途中です。
 
-エージェントに修正まで任せるときは、成果物のURLと目標を添えて次のように頼む。
+成果物のURLと分かっている利用場面を添え、エージェントに次のように頼めます。
 
-> この成果物を普段の入口から開き、初めての利用者として目標を達成して。止まったら、何を押して何が起きたかを記録し、必要な箇所を直して。修正後は同じ入口から同じ目標を試し、どこまで完了したかを証拠とともに返して。
+> このURLを初めて使う人として開いて。依頼や利用者の記録から、その人がどんな場面で何を知りたいかを一つ選んで。推定した部分は明記して。画面だけで用事を試し、得られた答えと根拠、足りなかった情報、最初に迷った箇所を返して。実装者が使えるように、どこにどの情報が必要かと、同じ用事で確かめる合格条件を一件にまとめて。修正も依頼されていれば、直して同じ入口から試し直して。
 
-## 用途と操作を確かめる
+## 欲しい答えを確かめる
 
-1. 対象の版、入口、想定利用者、使う場面、完了の目印を記録する。用途を確認できる仕様や依頼が見つからなければ「用途未確定」と記し、画面から読み取れた用途と、確認したい問いを返す。
-2. 初見の人に成果物だけを渡し、何ができそうか、どこから始めるかを聞く。想定用途と照合し、判断に使った見出しや最初に選んだ操作を記録する。
-3. 日常の目標だけを伝え、操作名や手順を伏せて試す。必要な操作に気づくか、名前から押した結果を予想できるか、画面が成功や失敗を伝えるかを観察する。補助なしで完了したか、補助後に完了したか、停止したかを記録する。静止画で確認できるのは最初に選びそうな箇所までとし、操作結果は「未確認」とする。
-4. 修正後は同じ入口・目標・完了条件で試す。比較する場合は対象の利用者、端末、初期状態もそろえる。完了件数と試行数、補助の有無、必要に応じて所要時間を記録する。同じ人が再試行した場合は、初見の測定と区別する。
+1. 依頼、問い合わせ、観察記録などから、誰がどんな場面で何を知り、何を決めるかを一文にする。根拠が仕様や担当者の想定だけなら仮説と記す。対象の版と入口を控え、必要な答えと照合先を決める。選択に正解が一つに定まらない場合は、候補が満たす条件と、選ぶ理由に必要な情報を決める。
+2. 初見の人に入口だけを渡し、何ができそうか、どこから始めるかを聞く。次に日常の目標を伝える。操作名、経路、正答は伏せ、利用者が見える画面とリンクから試す。最初に選んだ操作、迷った箇所、得られた答え、根拠となる表示やURLを記録する。静止画や操作できない画面では、確かめられなかった結果を「未確認」とする。
+3. 必要な答えと照合して「完了」「一部完了」「誤った答え」「未完了」「未確認」を記録する。必要な値や理由が一部だけ得られたら一部完了。条件外の候補を適合と判断したら誤った答え。補助があればその内容も記す。
+4. 答えが得られなかった箇所は、試行後に詳細画面や出典も照合する。情報自体がない、情報はあるが判断する画面に出ない、入口が見つからない、意味を読み取れない、操作が失敗する、のどれを確認できたかを書く。原因を確かめられなければ、観察と仮説を分けて記す。
+5. 修正後は同じ入口・目標・完了条件で試す。比較する場合は端末と初期状態もそろえる。完了件数と試行数、補助の有無、必要に応じて所要時間を記録する。同じ人の再試行は習熟の影響を受けるため、初見の測定と区別する。
 
 実利用者、担当者、エージェントのどれによる観察かを記す。エージェントの操作で再現した停止は修正に使える。利用者の行動傾向は、実利用者の試行から判断する。
 
-手順の出典は [GOV.UKの利用者テスト](https://www.gov.uk/service-manual/user-research/using-moderated-usability-testing)、[NN/gの認知的ウォークスルー](https://www.nngroup.com/articles/cognitive-walkthroughs/)、[GOV.UKの使いやすさの測定](https://www.gov.uk/service-manual/measuring-success/usability-benchmarking-a-website-or-whole-service)。
+手順の出典は [GOV.UKの利用者ニーズの特定](https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/plan-manage-content/identify-user-needs/)、[利用者テスト](https://www.gov.uk/service-manual/user-research/using-moderated-usability-testing)、[使いやすさの測定](https://www.gov.uk/service-manual/measuring-success/usability-benchmarking-a-website-or-whole-service)、[NN/gの認知的ウォークスルー](https://www.nngroup.com/articles/cognitive-walkthroughs/)。
 
 ## 直せる指摘を返す
 
@@ -31,16 +32,22 @@ tags:
 
 ```text
 対象・版・入口：
-誰が何を終えたいか：
+誰がどんな場面で何を知り、何を決めたいか：
+利用者を想定した根拠・答えの照合先：
 観察した人・端末・初期状態：
 初見で読み取った用途と最初に選んだ操作：
-実際の操作と結果（画面・要素・証拠）：
-作業への影響：
-修正後に満たす条件：
+得られた答え・判定・根拠（画面・要素・URL）：
+足りない情報・止まった箇所・作業への影響：
+修正指示（場所・必要な情報または操作・同じ用事での合格条件）：
 同じ入口からの再試行結果：
 ```
 
-架空の例。イベント一覧で「今週日曜に参加できる催しの開始時刻を調べる」。検索が0件で、画面に「対象なし」とだけ表示された。前回の絞り込み条件が残っており、一覧から解除できなかった。修正後は、適用中の条件を0件画面から解除し、同じ検索語で該当する催しの開始時刻を確認できれば合格とする。
+### 公開画面で試した例
+
+- **一部完了**。初参加の人を含む4人で30分以内に遊ぶゲームを選ぶ想定で、[ボドゲのミカタ](https://bodoge-no-mikata.vercel.app/)から絞り込み、2件を比較した。比較画面では人数と時間を読めたが、概要は両方とも「確認中」で、遊び方を比べられなかった。詳細には、[みんなでぽんこつペイント](https://bodoge-no-mikata.vercel.app/games/minna-de-ponkotsu-paint)はお絵かき、[Ipso](https://bodoge-no-mikata.vercel.app/games/ipso)は数字カードの交換だと分かる説明と出版元へのリンクがあった。修正案は、比較画面から同じ概要と出典を確認できるようにすること。再試行では、同じ2件のうちどちらを選ぶかを、人数・時間・遊び方を根拠に比較画面で説明できれば合格とする。
+- **完了**。既存プロジェクトに共有スタイルを入れたい開発者の想定で、[designの公開見本](https://kafka2306.github.io/design/)から「Use shared styles in your project」を開いた。リンク先で作成する `design.config.json`、実行する同期と適合確認のコマンドを特定できた。この課題で確認した範囲は手順の取得まで。
+
+2026年11月18日にエージェントがデスクトップのブラウザーで各1回試行した。[操作と判定の記録](https://github.com/KAFKA2306/design/issues/104)
 
 機械検証が返す指摘は [既存の違反スキーマ](../schemas/violation.schema.json) を使う。`observed` に実際の表示や挙動、`expected` に合格条件、`affected_surface` と `affected_state` に場所と状態、`verification_method` と `evidence` に確かめ方と証拠を入れる。
 
@@ -54,7 +61,7 @@ tags:
 | --- | --- | --- |
 | 何ができるか知り、始める | 見出し、用途の短い説明、最初の操作を入口にそろえる | [USWDSの案内ページ](https://designsystem.digital.gov/templates/landing-page/)、[GOV.UKのサービス開始](https://design-system.service.gov.uk/patterns/start-using-a-service/) |
 | 読みたい手順や根拠を探す | 本文を中心に置き、目次や根拠を補助欄から開けるようにする | [USWDSの文書ページ](https://designsystem.digital.gov/templates/documentation-page/)、[Primerのページ構成](https://primer.style/product/components/page-layout/) |
-| 候補を絞って比較する | 絞り込みの条件を見せ、初回・0件・取得失敗で次の操作を変える | [Carbonのデータ表](https://www.carbondesignsystem.com/building-blocks/core/components/data-table/guidelines)、[Carbonの空の状態](https://www.carbondesignsystem.com/building-blocks/core/patterns/empty-states) |
+| 候補を絞って比較する | 適用中の条件と、候補を選ぶのに必要な違いを一覧や比較の場で見せる。条件が厳しすぎる場合と取得に失敗した場合で次の操作を変える | [Baymardの一覧表示の観察](https://baymard.com/research-articles/product-listing-information)、[Board Game Finderの絞り込みと適合根拠](https://pickyourboardgame.com/about)、[Carbonの空の状態](https://www.carbondesignsystem.com/building-blocks/core/patterns/empty-states) |
 | 根拠を確認して判断を返す | 対象箇所に指摘を残し、全体の判断とその根拠をひと目で見つけられるようにする | [GitHubのPRレビュー](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request) |
 | 入力し、確認して完了する | 入力名とエラーを対応させ、確認画面と完了の目印を示す | [デジタル庁のテキスト入力](https://design.digital.go.jp/dads/components/input-text/usage/)、[GOV.UKの確認・完了パターン](https://design-system.service.gov.uk/patterns/) |
 
