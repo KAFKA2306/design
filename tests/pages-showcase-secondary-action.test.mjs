@@ -4,7 +4,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-test('showcase secondary action points to adoption contract', () => {
+test('showcase secondary action points to the registry', () => {
   const source = fs.readFileSync(path.join(root, 'src', 'main.tsx'), 'utf8');
-  assert.match(source, /secondaryAction=\{\{ label: 'Read adoption contract'/);
+  assert.match(source, /secondaryAction=\{\{ label: 'Inspect registry'/);
 });

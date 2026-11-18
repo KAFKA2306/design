@@ -6,5 +6,5 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 test('showcase primary action points to registry source', () => {
   const source = fs.readFileSync(path.join(root, 'src', 'main.tsx'), 'utf8');
-  assert.match(source, /label: 'Inspect registry'/);
+  assert.match(source, /label: 'Use shared styles in your project'/);
 });

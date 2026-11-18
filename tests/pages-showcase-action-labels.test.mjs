@@ -7,5 +7,5 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 test('showcase action labels are concrete', () => {
   const source = fs.readFileSync(path.join(root, 'src', 'main.tsx'), 'utf8');
   assert.match(source, /Inspect registry/);
-  assert.match(source, /Read adoption contract/);
+  assert.match(source, /Use shared styles in your project/);
 });

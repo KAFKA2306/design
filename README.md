@@ -90,14 +90,28 @@ Validate before merge using the scripts currently defined in `package.json`. CI 
 
 ## Consumer adoption
 
-A consumer owns one hand-edited `design.config.json`. Pin `designSha` to the exact 40-character commit of this repository, set the consumer CSS entry and managed directory, then run the checked-out design revision:
+Start with a project that already loads a CSS file. In your `design` checkout, follow the [development setup](#development) and copy the full SHA from `git rev-parse HEAD`. If you arrived from the showcase, check out the commit listed there to use the version you saw.
 
-```bash
-pnpm sync --consumer <consumer-path>
-pnpm conformance --consumer <consumer-path>
+In the root of **your project**, create `design.config.json`. Use the full SHA as `designSha`, set `cssEntry` to the CSS file your app already loads, and choose a directory for the generated CSS in `managedDir`. Both paths are relative to your project root. `base` is the general-purpose preset. The [config schema](schemas/design.config.schema.json) lists the available fields.
+
+```json
+{
+  "schemaVersion": 1,
+  "designSha": "REPLACE_WITH_FULL_DESIGN_COMMIT_SHA",
+  "preset": "base",
+  "cssEntry": "src/index.css",
+  "managedDir": "src/design"
+}
 ```
 
-`sync` copies canonical managed CSS, inserts one managed import block into the configured CSS entry, removes obsolete managed files recorded by the prior lock, and writes deterministic `design.lock.json` state. Running the same sync twice must produce no second diff.
+From the **design checkout**, run these commands with the path to **your project**:
+
+```bash
+pnpm sync --consumer "/path/to/your-project"
+pnpm conformance --consumer "/path/to/your-project"
+```
+
+When sync succeeds, your project has a `design.lock.json`, generated CSS in `managedDir`, and an import block in `cssEntry`. The conformance command prints `design conformance: ok` when they match the pinned version and satisfy the shared rules. Sync also removes obsolete managed files recorded by the prior lock. A second sync with the same inputs makes no changes.
 
 `conformance` fails visibly when the immutable design pin, managed files/import block, visual authority, forbidden effects, core-component duplication, or chart ownership drifts.
 

@@ -16,6 +16,7 @@ const palette = [
 ] as const;
 
 const deployedCommitUrl = `https://github.com/KAFKA2306/design/commit/${__DESIGN_COMMIT_SHA__}`;
+const adoptionGuideUrl = `https://github.com/KAFKA2306/design/blob/${__DESIGN_COMMIT_SHA__}/README.md#consumer-adoption`;
 const reviewGuideUrl = `https://github.com/KAFKA2306/design/blob/${__DESIGN_COMMIT_SHA__}/docs/frontend-review.md`;
 
 function App() {
@@ -45,8 +46,8 @@ function App() {
         decision="Adopt the authority, not a screenshot"
         rationale="Consumers sync pinned canonical source and verify conformance instead of copying visual rules."
         state="ready"
-        primaryAction={{ label: 'Inspect registry', onClick: () => { window.location.href = `https://github.com/KAFKA2306/design/tree/${__DESIGN_COMMIT_SHA__}/registry/ui`; } }}
-        secondaryAction={{ label: 'Read adoption contract', onClick: () => { window.location.href = `https://github.com/KAFKA2306/design/blob/${__DESIGN_COMMIT_SHA__}/README.md#consumer-adoption`; } }}
+        primaryAction={{ label: 'Use shared styles in your project', onClick: () => { window.location.href = adoptionGuideUrl; } }}
+        secondaryAction={{ label: 'Inspect registry', onClick: () => { window.location.href = `https://github.com/KAFKA2306/design/tree/${__DESIGN_COMMIT_SHA__}/registry/ui`; } }}
         evidence={[
           { label: 'Source', detail: 'registry/ui/product/decision.tsx' },
           { label: 'Verification', detail: 'Contract tests + deterministic consumer conformance' },
@@ -84,8 +85,9 @@ function App() {
       </section>
 
       <section aria-labelledby="adopt-title">
-        <div className="section-heading"><h2 id="adopt-title">Adopt</h2><span>two commands after config</span></div>
+        <div className="section-heading"><h2 id="adopt-title">Adopt</h2></div>
         <div className="type-stack">
+          <p><a href={adoptionGuideUrl}>Create your project's design.config.json</a> before running these commands from the design checkout.</p>
           <p className="type-mono">pnpm sync --consumer &lt;consumer-path&gt;</p>
           <p className="type-mono">pnpm conformance --consumer &lt;consumer-path&gt;</p>
           <p className="type-small">The repository remains the authority; consumer business logic and raw telemetry remain in the consumer.</p>
