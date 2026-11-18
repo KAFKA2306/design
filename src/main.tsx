@@ -16,6 +16,7 @@ const palette = [
 ] as const;
 
 const deployedCommitUrl = `https://github.com/KAFKA2306/design/commit/${__DESIGN_COMMIT_SHA__}`;
+const reviewGuideUrl = `https://github.com/KAFKA2306/design/blob/${__DESIGN_COMMIT_SHA__}/docs/frontend-review.md`;
 
 function App() {
   const [theme, setTheme] = useState<Theme>('light');
@@ -31,7 +32,7 @@ function App() {
           <p className="eyebrow">KAFKA2306 / DESIGN</p>
           <h1>Decision-first UI authority.</h1>
           <p className="lede">Tokens, components, product surfaces, journey grammar, and conformance checks live in one canonical repository. This page is built from that same authority.</p>
-          <p><a href="https://github.com/KAFKA2306/design">View source on GitHub</a> · <a href={deployedCommitUrl}>Deployed commit {__DESIGN_COMMIT_SHA__.slice(0, 7)}</a></p>
+          <p><a href="https://github.com/KAFKA2306/design">View source on GitHub</a> · <a href={reviewGuideUrl}>Review a UI</a> · <a href={deployedCommitUrl}>Deployed commit {__DESIGN_COMMIT_SHA__.slice(0, 7)}</a></p>
         </div>
         <button className="theme-toggle" type="button" aria-pressed={theme === 'dark'} onClick={() => applyTheme(theme === 'light' ? 'dark' : 'light')}>
           {theme === 'light' ? 'Dark' : 'Light'}

@@ -8,6 +8,8 @@ The public Pages surface shows the current canonical Product UI specimen. Source
 
 This repository owns reusable visual rules, UI components, interaction states, and action-based journeys. Consumer repositories own their business logic, data, deployment, and raw usage telemetry.
 
+[Review a UI from the user's starting point](docs/frontend-review.md) to check what a first-time visitor understands and report where a task stops.
+
 ## Current design contract
 
 - **Decision first:** make the next action, the reason for it, and supporting evidence easy to find. Preserve the distinction between actual, forecast, hypothesis, and unavailable or unverified information.

@@ -19,7 +19,7 @@ Route to the current repository authorities:
 1. Use the [design workflow](../../AGENTS.md#design-workflow) to define the user action and how to verify it. Inspect the consumer's actual UI, navigation, data, actions, states, and current design ownership.
 2. Map the user task to `registry/ui/product/journey.ts` and prefer existing Product UI components before consumer-local UI.
 3. Adopt the selected design revision through the current config/sync path, removing obsolete consumer-local visual authority that it replaces.
-4. Use `AGENTS.md` for repository-wide verification; for a rendered or deployed UI change, inspect the resulting surface.
+4. Use `AGENTS.md` for repository-wide verification. For a rendered or deployed UI change, use the [first-use review](../../docs/frontend-review.md) to test the resulting surface from the user's starting point and report where the task stops.
 
 ## Scope
 
