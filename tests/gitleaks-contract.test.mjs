@@ -7,4 +7,5 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 test('safety workflow includes maintained secret scanner', () => {
   const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'public-safety.yml'), 'utf8');
   assert.match(workflow, /uses:\s*gitleaks\/gitleaks-action@[0-9a-f]{40}\b/);
+  assert.match(workflow, /GITHUB_TOKEN: \$\{\{ secrets\.GITHUB_TOKEN \}\}/);
 });
