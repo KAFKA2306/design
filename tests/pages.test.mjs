@@ -8,11 +8,12 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 test('Pages deploys validated production build', () => {
   const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'pages.yml'), 'utf8');
+  assert.match(workflow, /actions\/checkout@[0-9a-f]{40}/);
   assert.match(workflow, /pnpm test/);
-  assert.match(workflow, /run: pnpm build/);
-  assert.match(workflow, /actions\/upload-pages-artifact/);
-  assert.match(workflow, /actions\/deploy-pages/);
-  assert.match(workflow, /needs: verify-and-build/);
+  assert.match(workflow, /run: pnpm build.*?actions\/configure-pages@[0-9a-f]{40}.*?actions\/upload-pages-artifact/s);
+  assert.match(workflow, /actions\/upload-pages-artifact@[^\n]+\n        with:\n          path: dist\n/);
+  assert.match(workflow, /actions\/deploy-pages@[0-9a-f]{40}/);
+  assert.match(workflow, /^  deploy:\n(?: {4}[^\n]*\n|\n)*?    needs: verify-and-build$/m);
 });
 
 test('Pages build and runtime expose the same exact commit provenance', () => {
@@ -21,6 +22,9 @@ test('Pages build and runtime expose the same exact commit provenance', () => {
   assert.match(vite, /fileName: 'provenance\.json'/);
   assert.match(vite, /schemaVersion: 1, designSha: commitSha/);
   assert.match(workflow, /provenance\.json/);
+  assert.match(workflow, /^    environment:\n      name: github-pages\n      url: \$\{\{ steps\.deployment\.outputs\.page_url \}\}$/m);
+  assert.match(workflow, /PAGE_URL: \$\{\{ steps\.deployment\.outputs\.page_url \}\}/);
+  assert.match(workflow, /provenance_url="\$\{PAGE_URL%\/\}\/provenance\.json"/);
   assert.match(workflow, /EXPECTED_SHA: \$\{\{ github\.sha \}\}/);
   assert.match(workflow, /Cache-Control: no-cache/);
   assert.doesNotMatch(workflow, /curl[^\n]*--no-cache/);

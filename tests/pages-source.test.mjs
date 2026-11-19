@@ -8,6 +8,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 test('Pages source remains main branch', () => {
   const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'pages.yml'), 'utf8');
   assert.match(workflow, /push:\n    branches: \[main\]/);
+  assert.doesNotMatch(workflow, /^ {2}pull_request(?:_target)?:/m);
 });
 
 test('Pages deployment is disabled while the repository is private', () => {

@@ -7,6 +7,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 test('Pages workflow declares required permissions only', () => {
   const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'pages.yml'), 'utf8');
   assert.match(workflow, /contents: read/);
+  assert.doesNotMatch(workflow, /contents:\s*write|write-all/);
   assert.match(workflow, /pages: write/);
   assert.match(workflow, /id-token: write/);
 });
